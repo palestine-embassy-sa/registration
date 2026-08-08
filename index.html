@@ -22,7 +22,7 @@
   .title-wrap{text-align:center;padding:20px 30px 0}
   .title-wrap h1{display:inline-block;margin:0;font-size:24px;font-weight:800;color:var(--wine)}
   .title-wrap::after{content:"";display:block;width:80px;height:3px;margin:12px auto 0;background:linear-gradient(90deg,var(--gold-soft),var(--wine),var(--gold-soft));border-radius:3px}
-  .notice{margin:18px 30px 0;background:var(--notice-bg);border:1px solid #e8b9c1;color:#8a2233;font-weight:700;font-size:13.5px;padding:12px 16px;border-radius:var(--radius-sm)}
+  .notice{margin:18px 30px 0;background:var(--notice-bg);border:1px solid #e8b9c1;color:#8a2233;font-weight:700;font-size:13.5px;padding:12px 16px;border-radius:var(--radius-sm);text-align:center}
   form{padding:10px 30px 30px}
   .section{margin-top:24px}
   .section>.bar{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;font-weight:700;font-size:16px;padding:11px 18px;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:11px}
@@ -191,7 +191,7 @@
       <div id="gateFound">
         <div class="who">تم العثور على سجل باسم: <span id="foundName">—</span></div>
         <div class="purpose">
-          <label style="font-weight:700;font-size:13.5px;display:block;margin-bottom:5px">سبب الحضور</label>
+          <label style="font-weight:700;font-size:13.5px;display:block;margin-bottom:5px">سبب الحضور <span class="req">*</span></label>
           <select id="gatePurpose">
             <option value="" disabled selected>— اختر —</option>
             <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
@@ -204,6 +204,7 @@
           <button type="button" class="update" onclick="gateProceed('update')">تحديث البيانات</button>
           <button type="button" class="newreq" onclick="gateProceed('new')">طلب جديد</button>
         </div>
+        <div class="gerr" id="gateFoundErr" style="margin-top:10px"></div>
       </div>
     </div>
     <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
@@ -343,25 +344,50 @@
     <div class="section">
       <div class="bar"><span class="num">2</span>وثائق السفر</div>
       <div class="grid">
-        <div class="field">
-          <label>رقم جواز السفر الفلسطيني <span class="req" id="passReq" style="display:none">*</span> <span class="info" data-tip="رقم جواز السفر الفلسطيني (مطلوب عند إدخال الهوية).">i</span></label>
-          <input name="passport_no" id="passport_no" inputmode="numeric" placeholder="أرقام فقط">
-          <div class="err-msg" id="passErr">مطلوب عند إدخال الهوية الفلسطينية — أرقام فقط</div>
+        <!-- Q1: هل تملك جواز سفر فلسطيني؟ -->
+        <div class="field full">
+          <label>هل تملك جواز سفر فلسطيني؟ <span class="req">*</span> <span class="info" data-tip="يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل.">i</span></label>
+          <div class="yesno">
+            <label class="yn"><input type="radio" name="hasPassport" value="yes" onchange="toggleTravelDocs()"> نعم</label>
+            <label class="yn"><input type="radio" name="hasPassport" value="no" onchange="toggleTravelDocs()"> لا</label>
+          </div>
+          <div class="err-msg" id="hasPassportErr">هذا الحقل مطلوب</div>
         </div>
-        <div class="field"><label>تاريخ انتهاء الجواز <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء جواز السفر.">i</span></label><input type="date" name="passport_expiry" id="passport_expiry" required><div class="err-msg">هذا الحقل مطلوب</div></div>
-        <div class="field">
-          <label>نوع وثيقة السفر <span class="info" data-tip="نوع وثيقة السفر إن لم يكن لديك جواز فلسطيني.">i</span></label>
+
+        <!-- Passport fields (shown if hasPassport = yes) -->
+        <div class="field hidden" data-passgrp="1">
+          <label>رقم جواز السفر الفلسطيني <span class="req">*</span> <span class="info" data-tip="رقم جواز السفر الفلسطيني (أرقام فقط).">i</span></label>
+          <input name="passport_no" id="passport_no" inputmode="numeric" placeholder="أرقام فقط">
+          <div class="err-msg">مطلوب — أرقام فقط</div>
+        </div>
+        <div class="field hidden" data-passgrp="1"><label>تاريخ انتهاء الجواز <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء جواز السفر.">i</span></label><input type="date" name="passport_expiry" id="passport_expiry"><div class="err-msg">هذا الحقل مطلوب</div></div>
+
+        <!-- Q2: هل تملك وثيقة سفر؟ (shown if hasPassport = no) -->
+        <div class="field full hidden" id="wathiqaQwrap">
+          <label>هل تملك وثيقة سفر؟ <span class="req">*</span> <span class="info" data-tip="إن لم يكن لديك جواز فلسطيني، يجب أن تملك وثيقة سفر.">i</span></label>
+          <div class="yesno">
+            <label class="yn"><input type="radio" name="hasWathiqa" value="yes" onchange="toggleTravelDocs()"> نعم</label>
+            <label class="yn"><input type="radio" name="hasWathiqa" value="no" onchange="toggleTravelDocs()"> لا</label>
+          </div>
+          <div class="err-msg" id="hasWathiqaErr">هذا الحقل مطلوب</div>
+        </div>
+
+        <!-- Wathiqa fields (shown if hasWathiqa = yes) -->
+        <div class="field hidden" data-docgrp="1">
+          <label>نوع وثيقة السفر <span class="req">*</span> <span class="info" data-tip="اختر نوع وثيقة السفر.">i</span></label>
           <select name="travel_doc_type" id="travel_doc_type">
             <option value="" selected>— اختر —</option>
             <option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>
           </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
         <div class="field hidden" id="docOtherWrap">
-          <label>حدد نوع الوثيقة <span class="info" data-tip="اكتب نوع الوثيقة إذا اخترت «أخرى».">i</span></label>
+          <label>حدد نوع الوثيقة <span class="req">*</span> <span class="info" data-tip="اكتب نوع الوثيقة إذا اخترت «أخرى».">i</span></label>
           <input name="travel_doc_type_other" placeholder="اكتب نوع الوثيقة">
+          <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
-        <div class="field"><label>رقم وثيقة السفر <span class="info" data-tip="رقم وثيقة السفر.">i</span></label><input name="travel_doc_no"></div>
-        <div class="field"><label>تاريخ انتهاء الوثيقة <span class="info" data-tip="تاريخ انتهاء وثيقة السفر.">i</span></label><input type="date" name="travel_doc_expiry"></div>
+        <div class="field hidden" data-docgrp="1"><label>رقم وثيقة السفر <span class="req">*</span> <span class="info" data-tip="رقم وثيقة السفر.">i</span></label><input name="travel_doc_no" id="travel_doc_no"><div class="err-msg">هذا الحقل مطلوب</div></div>
+        <div class="field hidden" data-docgrp="1"><label>تاريخ انتهاء الوثيقة <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء وثيقة السفر.">i</span></label><input type="date" name="travel_doc_expiry" id="travel_doc_expiry"><div class="err-msg">هذا الحقل مطلوب</div></div>
       </div>
     </div>
 
@@ -544,9 +570,18 @@
   }
 
   function gateProceed(mode){
-    var err=document.getElementById('gateErr');
-    var purpose=document.getElementById('gatePurpose').value;
-    if(!purpose){err.textContent='يرجى اختيار سبب الحضور';return;}
+    var err=document.getElementById('gateFoundErr');
+    var purposeEl=document.getElementById('gatePurpose');
+    var purpose=purposeEl.value;
+    err.textContent='';
+    purposeEl.style.borderColor='';
+    if(!purpose){
+      err.textContent='يرجى اختيار سبب الحضور أولاً';
+      purposeEl.style.borderColor='var(--wine)';
+      purposeEl.scrollIntoView({behavior:'smooth',block:'center'});
+      purposeEl.focus();
+      return;
+    }
     if(mode==='update'){
       openForm(true,__prefill||{});
     }else{
@@ -598,6 +633,21 @@
       });
       // split stored full_name into the 4 applicant name fields
       if(seed.full_name)splitName(seed.full_name,['name1','name2','name3','name4']);
+      // restore passport/wathiqa answers from stored record
+      (function(){
+        var hasP=(seed.passport_no&&String(seed.passport_no).trim()!=='');
+        var hasW=(seed.travel_doc_type&&String(seed.travel_doc_type).trim()!=='');
+        if(hasP){var r=document.querySelector('input[name="hasPassport"][value="yes"]');if(r){r.checked=true;}}
+        else if(hasW){var r2=document.querySelector('input[name="hasPassport"][value="no"]');if(r2){r2.checked=true;}
+          var w=document.querySelector('input[name="hasWathiqa"][value="yes"]');if(w){w.checked=true;}}
+        toggleTravelDocs();
+        // re-apply stored values after fields are shown
+        if(hasP){var pno=document.getElementById('passport_no');if(pno)pno.value=seed.passport_no||'';var pex=document.getElementById('passport_expiry');if(pex&&seed.passport_expiry)pex.value=seed.passport_expiry;}
+        if(hasW){var dt=document.getElementById('travel_doc_type');if(dt)dt.value=seed.travel_doc_type||'';toggleTravelDocs();
+          var dn=document.getElementById('travel_doc_no');if(dn)dn.value=seed.travel_doc_no||'';
+          var de=document.getElementById('travel_doc_expiry');if(de&&seed.travel_doc_expiry)de.value=seed.travel_doc_expiry;
+          if(seed.travel_doc_type_other){var o=document.querySelector('[name="travel_doc_type_other"]');if(o)o.value=seed.travel_doc_type_other;}}
+      })();
       // if updating, also rebuild wives/children then fill them
       if(isUpdate){ prefillFamily(seed); }
     }
@@ -673,16 +723,36 @@
 
   // ===== travel doc other =====
   var docSel=document.getElementById('travel_doc_type'),docOtherWrap=document.getElementById('docOtherWrap');
-  docSel.addEventListener('change',()=>docOtherWrap.classList.toggle('hidden',docSel.value!=='أخرى'));
+  docSel.addEventListener('change',()=>{toggleTravelDocs();});
 
-  // ===== applicant: Palestinian ID -> passport required =====
-  var pid=document.getElementById('palestinian_id'),pass=document.getElementById('passport_no'),
-      passReq=document.getElementById('passReq');
-  function syncPassReq(){
-    var need=pid.value.trim()!=='';
-    passReq.style.display=need?'inline':'none';
+  // ===== وثائق السفر: جواز -> وإلا وثيقة (واحدة على الأقل) =====
+  var pid=document.getElementById('palestinian_id');
+  function toggleTravelDocs(){
+    var hasPass=document.querySelector('input[name="hasPassport"]:checked');
+    var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
+    var passYes = hasPass && hasPass.value==='yes';
+    var passNo  = hasPass && hasPass.value==='no';
+    // passport fields
+    document.querySelectorAll('[data-passgrp]').forEach(function(el){
+      el.classList.toggle('hidden',!passYes);
+      if(!passYes){var inp=el.querySelector('input'); if(inp)inp.value='';}
+    });
+    // show wathiqa question only if no passport
+    document.getElementById('wathiqaQwrap').classList.toggle('hidden',!passNo);
+    if(!passNo){ // clear wathiqa answer + fields when passport=yes or unanswered
+      document.querySelectorAll('input[name="hasWathiqa"]').forEach(function(r){r.checked=false;});
+    }
+    var wathYes = passNo && hasWath && hasWath.value==='yes';
+    document.querySelectorAll('[data-docgrp]').forEach(function(el){
+      el.classList.toggle('hidden',!wathYes);
+      if(!wathYes){var inp=el.querySelector('input,select'); if(inp)inp.value='';}
+    });
+    // doc-other only if wathiqa shown and type=أخرى
+    var showOther = wathYes && docSel.value==='أخرى';
+    docOtherWrap.classList.toggle('hidden',!showOther);
+    if(!showOther){var o=docOtherWrap.querySelector('input'); if(o&&!wathYes)o.value='';}
   }
-  pid.addEventListener('input',syncPassReq);
+  window.toggleTravelDocs=toggleTravelDocs;
 
   // ===== marital -> wives + children =====
   var marital=document.getElementById('marital'),
@@ -850,7 +920,7 @@
       sres=document.getElementById('saudi_residency'),bp=document.getElementById('birth_place'),
       bd=document.getElementById('birth_date'),emp=document.getElementById('employer'),dist=document.getElementById('district'),
       rexp=document.getElementById('residency_expiry'),
-      occ=document.getElementById('occupation'),pexp=document.getElementById('passport_expiry');
+      occ=document.getElementById('occupation');
   // split a stored full name into the 4 part-inputs
   function splitName(fullname,ids){
     var parts=(fullname||'').trim().split(/\s+/).filter(Boolean);
@@ -863,7 +933,6 @@
   email.addEventListener('blur',()=>setInvalid(email,!emailOK(email.value)));
   pid.addEventListener('blur',()=>setInvalid(pid,pid.value!==''&&!digitsN(pid.value,9)));
   sres.addEventListener('blur',()=>setInvalid(sres,!digitsN(sres.value,10)));
-  pass.addEventListener('blur',()=>{var need=pid.value.trim()!=='';setInvalid(pass,(need&&pass.value.trim()==='')||(pass.value.trim()!==''&&!digitsOnly(pass.value)));});
 
   var form=document.getElementById('regForm'),btn=document.getElementById('submitBtn'),statusEl=document.getElementById('status');
   form.addEventListener('submit',async function(e){
@@ -881,15 +950,45 @@
     document.getElementById('full_name').value=nameParts.map(function(e){return e.value.trim();}).join(' ');
     [[mn,oneNameOK(mn.value)],
      [sres,(sres.dataset.optional==='1'?(sres.value===''||digitsN(sres.value,10)):digitsN(sres.value,10))],[rexp,(sres.dataset.optional==='1'?true:!!rexp.value)],[bp,!!bp.value],[bd,!!bd.value],
-     [occ,!!occ.value],[emp,!!emp.value],[dist,!!dist.value],[pexp,!!pexp.value],
+     [occ,!!occ.value],[emp,!!emp.value],[dist,!!dist.value],
      [mobile,phoneOK(mobile.value)],[email,emailOK(email.value)]
     ].forEach(function(x){setInvalid(x[0],!x[1]);if(!x[1])bad(x[0]);});
     // palestinian id optional but if filled must be 9
     var pidOK=pid.value===''||digitsN(pid.value,9);setInvalid(pid,!pidOK);if(!pidOK)bad(pid);
-    // if pal id filled -> passport required + digits; else optional digits
-    var needPass=pid.value.trim()!=='';
-    var passOK = needPass ? (pass.value.trim()!==''&&digitsOnly(pass.value)) : (pass.value===''||digitsOnly(pass.value));
-    setInvalid(pass,!passOK);if(!passOK)bad(pass);
+
+    // travel documents: passport OR wathiqa, at least one
+    (function(){
+      var hasPass=document.querySelector('input[name="hasPassport"]:checked');
+      var hasPassErr=document.getElementById('hasPassportErr');
+      var hasPassField=hasPassErr.closest('.field');
+      if(!hasPass){ hasPassField.classList.add('invalid'); bad(hasPassField.querySelector('input')); return; }
+      hasPassField.classList.remove('invalid');
+      if(hasPass.value==='yes'){
+        // passport required: number (digits) + expiry
+        var pno=document.getElementById('passport_no'), pex=document.getElementById('passport_expiry');
+        var pnoOK=pno.value.trim()!==''&&digitsOnly(pno.value); setInvalid(pno,!pnoOK); if(!pnoOK)bad(pno);
+        var pexOK=!!pex.value; setInvalid(pex,!pexOK); if(!pexOK)bad(pex);
+      }else{
+        // no passport -> wathiqa question required
+        var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
+        var hasWathErr=document.getElementById('hasWathiqaErr');
+        var hasWathField=hasWathErr.closest('.field');
+        if(!hasWath){ hasWathField.classList.add('invalid'); bad(hasWathField.querySelector('input')); return; }
+        hasWathField.classList.remove('invalid');
+        if(hasWath.value==='yes'){
+          var dt=document.getElementById('travel_doc_type'), dn=document.getElementById('travel_doc_no'), de=document.getElementById('travel_doc_expiry');
+          var dtOK=!!dt.value; setInvalid(dt,!dtOK); if(!dtOK)bad(dt);
+          if(dt.value==='أخرى'){var oth=document.querySelector('[name="travel_doc_type_other"]');var oOK=oth.value.trim()!=='';setInvalid(oth,!oOK);if(!oOK)bad(oth);}
+          var dnOK=dn.value.trim()!==''; setInvalid(dn,!dnOK); if(!dnOK)bad(dn);
+          var deOK=!!de.value; setInvalid(de,!deOK); if(!deOK)bad(de);
+        }else{
+          // said no to both -> must have at least one
+          hasWathField.classList.add('invalid');
+          document.getElementById('hasWathiqaErr').textContent='يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل';
+          bad(hasWathField.querySelector('input'));
+        }
+      }
+    })();
 
     // wives: every field validated by its data-vtype
     if(isMarried()){
