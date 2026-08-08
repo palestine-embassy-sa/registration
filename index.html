@@ -31,8 +31,8 @@
   .field{display:flex;flex-direction:column}
   .field.full{grid-column:1 / -1}
   .field label{font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:8px}
-  .info{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid var(--muted);color:var(--muted);font-size:10px;font-weight:700;margin-inline-start:6px;cursor:help;position:relative;font-family:serif}
-  table.children th .info{border-color:rgba(255,255,255,.7);color:#fff}
+  .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gold);color:var(--gold);font-size:11px;font-weight:700;font-style:italic;line-height:1;margin-inline-start:6px;cursor:help;position:relative;vertical-align:middle;font-family:Georgia,'Times New Roman',serif;flex:0 0 auto}
+  table.children th .info{border-color:rgba(255,255,255,.75);color:#fff}
   .info:hover::after,.info:active::after{content:attr(data-tip);position:absolute;bottom:135%;right:50%;transform:translateX(50%);background:var(--ink);color:#fff;font-weight:500;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:normal;width:190px;text-align:right;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
   .info:hover::before,.info:active::before{content:"";position:absolute;bottom:135%;right:50%;transform:translateX(50%) translateY(100%);border:6px solid transparent;border-top-color:var(--ink);z-index:40}
   .field label .req{color:var(--wine);margin-inline-start:4px}
@@ -71,7 +71,37 @@
   .done h2{color:var(--wine);margin:0 0 10px}
   .done p{color:var(--muted);margin:0 0 22px}
   .done button{background:transparent;border:1.5px solid var(--wine);color:var(--wine);font-family:inherit;font-weight:700;padding:11px 26px;border-radius:22px;cursor:pointer}
-  @media(max-width:660px){.head-inner{flex-direction:column;text-align:center;gap:14px}.head .side{text-align:center}.grid{grid-template-columns:1fr}}
+  @media(max-width:660px){
+    body{padding:12px 6px;font-size:14.5px}
+    .sheet{border-radius:14px}
+    .head{padding:22px 16px 18px}
+    .head .crest{width:84px;height:84px}
+    .head .crest img{width:56px}
+    .head .state{font-size:21px}
+    .head .sub{font-size:13px}
+    .head-inner{flex-direction:column;text-align:center;gap:12px}
+    .head .side{text-align:center}
+    form{padding:8px 14px 22px}
+    .title-wrap{padding:16px 14px 0}
+    .title-wrap h1{font-size:20px}
+    .notice{margin:14px 14px 0;font-size:12.5px;padding:10px 12px}
+    .grid{grid-template-columns:1fr;padding:14px;gap:12px}
+    .section>.bar{font-size:15px;padding:10px 14px}
+    #gate{padding:22px 16px 30px}
+    .typechoice{gap:10px;margin:8px 0 18px}
+    .tcbtn{font-size:14px;padding:11px 6px}
+    .field input,.field select,.field textarea,#gate input{font-size:16px}  /* 16px prevents iOS zoom */
+    .info{width:17px;height:17px;font-size:11px}
+    .info:hover::after,.info:active::after{width:160px;font-size:11px}
+    /* children table: allow horizontal scroll, keep inputs usable */
+    table.children{min-width:900px}
+    .count-row{gap:8px}
+    button.submit{width:100%;padding:14px}
+  }
+  @media(max-width:400px){
+    .typechoice{flex-direction:column}
+    .head .state{font-size:19px}
+  }
 
   /* ===== ID gate ===== */
   #gate{padding:34px 30px 44px}
@@ -206,10 +236,26 @@
       <div class="bar"><span class="num">1</span>البيانات الشخصية</div>
       <div class="grid">
         <div class="field">
-          <label>الاسم الرباعي <span class="req">*</span> <span class="info" data-tip="أدخل الاسم الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>
-          <input name="full_name" id="full_name" data-ar required placeholder="الاسم الأول الثاني الثالث الرابع">
-          <div class="err-msg">يجب إدخال أربعة أسماء بالحروف العربية</div>
+          <label>الاسم الأول <span class="req">*</span> <span class="info" data-tip="الاسم الأول بالحروف العربية (اسم واحد فقط).">i</span></label>
+          <input name="name1" id="name1" data-word required placeholder="الاسم الأول">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
         </div>
+        <div class="field">
+          <label>الاسم الثاني <span class="req">*</span> <span class="info" data-tip="الاسم الثاني (اسم الأب) بالحروف العربية.">i</span></label>
+          <input name="name2" id="name2" data-word required placeholder="الاسم الثاني">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+        </div>
+        <div class="field">
+          <label>الاسم الثالث <span class="req">*</span> <span class="info" data-tip="الاسم الثالث (اسم الجد) بالحروف العربية.">i</span></label>
+          <input name="name3" id="name3" data-word required placeholder="الاسم الثالث">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+        </div>
+        <div class="field">
+          <label>الاسم الرابع (العائلة) <span class="req">*</span> <span class="info" data-tip="اسم العائلة بالحروف العربية.">i</span></label>
+          <input name="name4" id="name4" data-word required placeholder="اسم العائلة">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+        </div>
+        <input type="hidden" name="full_name" id="full_name">
         <div class="field">
           <label>اسم الأم <span class="req">*</span> <span class="info" data-tip="اسم الأم الأول فقط بالحروف العربية.">i</span></label>
           <input name="mother_name" id="mother_name" data-ar required placeholder="اسم واحد فقط">
@@ -217,17 +263,17 @@
         </div>
         <div class="field">
           <label>رقم الهوية الفلسطينية <span class="info" data-tip="رقم الهوية الفلسطينية المكوّن من 9 أرقام (اختياري).">i</span></label>
-          <input name="palestinian_id" id="palestinian_id" inputmode="numeric" placeholder="9 أرقام (اختياري)">
+          <input name="palestinian_id" id="palestinian_id" inputmode="numeric" maxlength="9" oninput="capDigits(this,9)" placeholder="9 أرقام (اختياري)">
           <div class="err-msg">إن تم إدخالها يجب أن تكون 9 أرقام</div>
         </div>
         <div class="field">
           <label>رقم الإقامة السعودية <span class="req">*</span></label>
-          <input name="saudi_residency" id="saudi_residency" inputmode="numeric" required placeholder="10 أرقام">
+          <input name="saudi_residency" id="saudi_residency" inputmode="numeric" maxlength="10" oninput="capDigits(this,10)" required placeholder="10 أرقام">
           <div class="err-msg">مطلوب ويجب أن يتكوّن من 10 أرقام</div>
         </div>
         <div class="field">
           <label>رقم الحدود <span class="info" data-tip="رقم بطاقة الحدود/الزيارة كما هو مدوّن في الوثيقة.">i</span></label>
-          <input name="border_no" id="border_no" inputmode="numeric" placeholder="رقم الحدود (اختياري)">
+          <input name="border_no" id="border_no" inputmode="numeric" maxlength="20" oninput="capDigits(this,20)" placeholder="رقم الحدود (اختياري)">
         </div>
         <div class="field">
           <label>تاريخ انتهاء الإقامة <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء الإقامة السعودية كما في البطاقة.">i</span></label>
@@ -344,7 +390,10 @@
       <div id="childrenWrap" class="tablewrap hidden">
         <table class="children">
           <thead><tr>
-            <th>م</th><th>الاسم الرباعي <span class="req">*</span> <span class="info" data-tip="الاسم الرباعي للابن بالحروف العربية.">i</span></th><th>اسم الأم <span class="req">*</span> <span class="info" data-tip="اسم الأم الأول فقط بالحروف العربية.">i</span></th>
+            <th>م</th>
+            <th>الاسم الأول <span class="req">*</span></th><th>الثاني <span class="req">*</span></th>
+            <th>الثالث <span class="req">*</span></th><th>الرابع <span class="req">*</span></th>
+            <th>اسم الأم <span class="req">*</span> <span class="info" data-tip="اسم الأم الأول فقط بالحروف العربية.">i</span></th>
             <th>مكان الميلاد <span class="req">*</span> <span class="info" data-tip="مدينة/بلد الميلاد بالحروف العربية.">i</span></th><th>تاريخ الميلاد <span class="req">*</span> <span class="info" data-tip="تاريخ الميلاد حسب التقويم الميلادي.">i</span></th>
             <th>رقم الإقامة السعودية <span class="req">*</span> <span class="info" data-tip="رقم الإقامة السعودية المكوّن من 10 أرقام.">i</span></th><th>رقم الهوية الفلسطينية <span class="info" data-tip="رقم الهوية الفلسطينية 9 أرقام (اختياري).">i</span></th>
             <th>نوع الجواز <span class="info" data-tip="اختر نوع الجواز؛ فلسطيني أو غيره.">i</span></th><th>رقم الجواز <span class="info" data-tip="رقم الجواز (أرقام فقط).">i</span></th>
@@ -366,10 +415,17 @@
   function capDigits(el,max){var v=(el.value||'').replace(/[^0-9]/g,'');if(v.length>max)v=v.slice(0,max);el.value=v;}
   // يسمح بالحروف العربية والمسافات فقط (للأسماء والحقول النصية)
   function arabicOnly(el){el.value=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F\s]/g,'');}
+  // اسم واحد فقط: حروف عربية بدون مسافات أو أرقام
+  function arabicWord(el){el.value=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F]/g,'');}
+  function arabicWordOK(v){v=(v||'').trim();return v!==''&&/^[\u0600-\u06FF\u0750-\u077F]+$/.test(v);}
   // يطبّق فلتر العربية على كل الحقول التي تحمل data-ar
   function wireArabic(root){(root||document).querySelectorAll('[data-ar]').forEach(function(el){
     if(el.__arWired)return; el.__arWired=true;
     el.addEventListener('input',function(){arabicOnly(el);});
+  });
+  (root||document).querySelectorAll('[data-word]').forEach(function(el){
+    if(el.__wWired)return; el.__wWired=true;
+    el.addEventListener('input',function(){arabicWord(el);});
   });}
   // خريطة تلميحات حسب نص العنوان (للأقسام المُولّدة: الزوجات/الأبناء)
   var TIP_MAP={
@@ -531,6 +587,8 @@
         var el=f.querySelector('[name="'+nm+'"]')||document.getElementById(nm);
         if(el) el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input'));
       });
+      // split stored full_name into the 4 applicant name fields
+      if(seed.full_name)splitName(seed.full_name,['name1','name2','name3','name4']);
       // if updating, also rebuild wives/children then fill them
       if(isUpdate){ prefillFamily(seed); }
     }
@@ -550,7 +608,18 @@
         var el=document.querySelector('[name="'+k+'"]');
         if(el && rec[k]!=null && rec[k]!==''){ el.value=rec[k]; if(el.tagName==='SELECT') el.value=rec[k]; }
       });
-    },120);
+      // split wife/child stored names into 4 parts each
+      for(var w=1;w<=wc;w++){
+        if(rec['wife'+w+'_name'])splitName(rec['wife'+w+'_name'],[
+          document.querySelector('[name="wife'+w+'_n1"]'),document.querySelector('[name="wife'+w+'_n2"]'),
+          document.querySelector('[name="wife'+w+'_n3"]'),document.querySelector('[name="wife'+w+'_n4"]')]);
+      }
+      for(var c=1;c<=cc;c++){
+        if(rec['child'+c+'_name'])splitName(rec['child'+c+'_name'],[
+          document.querySelector('[name="child'+c+'_n1"]'),document.querySelector('[name="child'+c+'_n2"]'),
+          document.querySelector('[name="child'+c+'_n3"]'),document.querySelector('[name="child'+c+'_n4"]')]);
+      }
+    },140);
   }
 
   function showModeBanner(isUpdate){
@@ -578,6 +647,7 @@
   function ruleOK(v,vtype){
     v=(v||'').trim();
     if(vtype==='name')return fourArabicOK(v);
+    if(vtype==='word')return arabicWordOK(v);
     if(vtype==='mother1')return oneNameOK(v);
     if(vtype==='id9opt')return v===''||digitsN(v,9);
     if(vtype==='res10')return digitsN(v,10);
@@ -626,7 +696,7 @@
     var P='wife'+i+'_';
     var card=document.createElement('div');card.className='wifecard';
     card.innerHTML='<div class="wt">الزوجة رقم '+i+'</div><div class="grid">'+
-      fld(P+'name','اسم الزوجة الرباعي',true,'name','أربعة أسماء بالعربية','')+
+      nameFields(P,'اسم الزوجة')+
       fld(P+'mother_name','اسم والدة الزوجة',true,'mother1','اسم واحد فقط بالعربية','')+
       '<div class="field"><label>الجنسية <span class="req">*</span></label>'+
         '<select name="'+P+'nationality" data-vtype="req"><option value="" disabled selected>— اختر —</option>'+NAT_OPTIONS+'</select>'+
@@ -634,12 +704,14 @@
       fld(P+'birth_place','مكان الميلاد',true,'req','هذا الحقل مطلوب','')+
       fldDate(P+'birth_date','تاريخ الميلاد',true)+
       '<div class="field" data-palonly="'+i+'"><label>رقم الهوية الفلسطينية</label>'+
-        '<input name="'+P+'palestinian_id" data-vtype="id9opt" placeholder="9 أرقام (اختياري)">'+
+        '<input name="'+P+'palestinian_id" data-vtype="id9opt" maxlength="9" oninput="capDigits(this,9)" placeholder="9 أرقام (اختياري)">'+
         '<div class="err-msg">إن أُدخلت يجب أن تكون 9 أرقام</div></div>'+
       '<div class="field" data-saudionly="'+i+'" style="display:none"><label>رقم الهوية الوطنية السعودية <span class="req">*</span></label>'+
         '<input name="'+P+'saudi_id" data-vtype="sid10" maxlength="10" placeholder="10 أرقام">'+
         '<div class="err-msg">مطلوب ويجب أن يكون 10 أرقام</div></div>'+
-      fld(P+'saudi_residency','رقم الإقامة السعودية',false,'res10opt','إن أُدخل يجب أن يكون 10 أرقام','10 أرقام (اختياري)')+
+      '<div class="field"><label>رقم الإقامة السعودية</label>'+
+        '<input name="'+P+'saudi_residency" data-vtype="res10opt" maxlength="10" oninput="capDigits(this,10)" placeholder="10 أرقام (اختياري)">'+
+        '<div class="err-msg">إن أُدخل يجب أن يكون 10 أرقام</div></div>'+
       fldDate(P+'residency_expiry','تاريخ انتهاء الإقامة',false)+
       '<div class="field" data-palonly="'+i+'"><label>رقم جواز السفر الفلسطيني <span class="req" id="wpass'+i+'req" style="display:none">*</span></label>'+
         '<input name="'+P+'passport_no" id="wpass'+i+'" data-vtype="optdigits" placeholder="أرقام فقط">'+
@@ -651,6 +723,17 @@
       fld(P+'doc_no','رقم وثيقة السفر',false,'opt','','')+
       '</div>';
     return card;
+  }
+  // يبني 4 حقول اسم منفصلة + حقل مخفي يجمعها
+  function nameFields(P, lbl){
+    function one(n,label,ph){
+      return '<div class="field"><label>'+label+' <span class="req">*</span></label>'+
+        '<input name="'+P+n+'" data-word data-vtype="word" placeholder="'+ph+'">'+
+        '<div class="err-msg">اسم واحد بالحروف العربية فقط</div></div>';
+    }
+    return one('n1',lbl+' — الأول','الأول')+one('n2',lbl+' — الثاني','الثاني')+
+           one('n3',lbl+' — الثالث','الثالث')+one('n4',lbl+' — الرابع','العائلة')+
+           '<input type="hidden" name="'+P+'name">';
   }
   function fld(name,label,req,vtype,msg,ph,extraId){
     var isText=(vtype==='name'||vtype==='mother1'||vtype==='req');
@@ -709,7 +792,8 @@
   // ===== children table: id9 optional, res10 required, passport optional digits =====
   var CHILD_DOC_OPTIONS = '<option>فلسطيني</option><option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>';
   var CHILD_COLS=[
-    ['name','text','name'],['mother_name','text','mother1'],['birth_place','text','req'],['birth_date','date','req'],
+    ['n1','word','word'],['n2','word','word'],['n3','word','word'],['n4','word','word'],
+    ['mother_name','text','mother1'],['birth_place','text','req'],['birth_date','date','req'],
     ['saudi_residency','text','res10'],['palestinian_id','text','id9opt'],
     ['passport_type','cdoc',''],['passport_no','text','optdigits']
   ];
@@ -717,16 +801,23 @@
   function childRow(i){
     var tr=document.createElement('tr');var html='<td>'+i+'</td>';
     CHILD_COLS.forEach(function(c){
-      var isText=(c[2]==='name'||c[2]==='mother1'||c[2]==='req');
+      var isText=(c[2]==='mother1'||c[2]==='req');
+      var isWord=(c[1]==='word');
       if(c[1]==='doc'){
         html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype=""><option value="" selected>—</option>'+DOC_OPTIONS+'</select></td>';
       }else if(c[1]==='cdoc'){
         html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="" data-cdoc="'+i+'"><option value="" selected>—</option>'+CHILD_DOC_OPTIONS+'</select>'+
           '<input name="child'+i+'_passport_type_other" data-cdocother="'+i+'" placeholder="حدد النوع" style="display:none;margin-top:4px"></td>';
+      }else if(isWord){
+        html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word data-cvtype="word"></td>';
       }else{
-        html+='<td><input type="'+(c[1]==='date'?'date':'text')+'" name="child'+i+'_'+c[0]+'"'+(isText?' data-ar':'')+' data-cvtype="'+c[2]+'"></td>';
+        var cap='';
+        if(c[0]==='saudi_residency')cap=' maxlength="10" oninput="capDigits(this,10)"';
+        else if(c[0]==='palestinian_id')cap=' maxlength="9" oninput="capDigits(this,9)"';
+        html+='<td><input type="'+(c[1]==='date'?'date':'text')+'" name="child'+i+'_'+c[0]+'"'+(isText?' data-ar':'')+cap+' data-cvtype="'+c[2]+'"></td>';
       }
     });
+    html+='<input type="hidden" name="child'+i+'_name">';
     tr.innerHTML=html;return tr;
   }
   function renderChildren(n){
@@ -751,7 +842,11 @@
       bd=document.getElementById('birth_date'),emp=document.getElementById('employer'),dist=document.getElementById('district'),
       rexp=document.getElementById('residency_expiry'),
       occ=document.getElementById('occupation'),pexp=document.getElementById('passport_expiry');
-  fullName.addEventListener('blur',()=>setInvalid(fullName,!fourArabicOK(fullName.value)));
+  // split a stored full name into the 4 part-inputs
+  function splitName(fullname,ids){
+    var parts=(fullname||'').trim().split(/\s+/).filter(Boolean);
+    for(var i=0;i<4;i++){var el=(typeof ids[i]==='string')?document.getElementById(ids[i]):ids[i];if(el)el.value=parts[i]||'';}
+  }
   var motherEl=document.getElementById('mother_name');
   if(motherEl)motherEl.addEventListener('blur',()=>setInvalid(motherEl,!oneNameOK(motherEl.value)));
   wireArabic(document); // applicant text fields
@@ -770,7 +865,12 @@
     ['reason','marital','region'].forEach(function(id){var el=document.getElementById(id);var b=!el.value;setInvalid(el,b);if(b)bad(el);});
     // applicant required + rules
     var mn=document.querySelector('[name="mother_name"]');
-    [[fullName,fourArabicOK(fullName.value)],[mn,oneNameOK(mn.value)],
+    // four separate name parts
+    var nameParts=[document.getElementById('name1'),document.getElementById('name2'),document.getElementById('name3'),document.getElementById('name4')];
+    nameParts.forEach(function(el){var ok=arabicWordOK(el.value);setInvalid(el,!ok);if(!ok)bad(el);});
+    // combine into hidden full_name
+    document.getElementById('full_name').value=nameParts.map(function(e){return e.value.trim();}).join(' ');
+    [[mn,oneNameOK(mn.value)],
      [sres,(sres.dataset.optional==='1'?(sres.value===''||digitsN(sres.value,10)):digitsN(sres.value,10))],[rexp,(sres.dataset.optional==='1'?true:!!rexp.value)],[bp,!!bp.value],[bd,!!bd.value],
      [occ,!!occ.value],[emp,!!emp.value],[dist,!!dist.value],[pexp,!!pexp.value],
      [mobile,phoneOK(mobile.value)],[email,emailOK(email.value)]
@@ -812,6 +912,20 @@
 
     if(firstBad){firstBad.focus();firstBad.scrollIntoView({behavior:'smooth',block:'center'});
       statusEl.textContent='يرجى تصحيح الحقول المميزة بالأحمر';statusEl.classList.add('err');return;}
+
+    // combine 4-part names into wife{i}_name and child{i}_name hidden fields
+    (function(){
+      var wc=parseInt(wivesCount.value)||0;
+      for(var w=1;w<=wc;w++){
+        var parts=['n1','n2','n3','n4'].map(function(n){var el=wivesContainer.querySelector('[name="wife'+w+'_'+n+'"]');return el?el.value.trim():'';});
+        var h=wivesContainer.querySelector('[name="wife'+w+'_name"]'); if(h)h.value=parts.join(' ').trim();
+      }
+      var cc=parseInt(childrenCount.value)||0;
+      for(var c=1;c<=cc;c++){
+        var cparts=['n1','n2','n3','n4'].map(function(n){var el=childrenBody.querySelector('[name="child'+c+'_'+n+'"]');return el?el.value.trim():'';});
+        var ch=childrenBody.querySelector('[name="child'+c+'_name"]'); if(ch)ch.value=cparts.join(' ').trim();
+      }
+    })();
 
     var data={};new FormData(form).forEach((v,k)=>data[k]=v);
     data.wives_count=wivesCount.value||'0';data.children_count=childrenCount.value||'0';
