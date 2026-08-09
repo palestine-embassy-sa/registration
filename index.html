@@ -59,6 +59,9 @@
   table.children td{border:1px solid var(--line);padding:4px;text-align:center;background:#fff}
   table.children td:first-child{background:var(--label-bg);font-weight:700;width:36px}
   table.children input,table.children select{width:100%;min-width:120px;border:1px solid transparent;border-radius:7px;padding:8px 6px;font-family:inherit;font-size:13.5px;text-align:center;background:transparent}
+  table.children input[type=date]{-webkit-appearance:none;appearance:none;background:#fff;border:1px solid var(--line);min-height:38px;text-align:center;color:var(--ink)}
+  table.children input[type=date]::-webkit-date-and-time-value{text-align:center}
+  table.children input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
   table.children input:focus,table.children select:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 2px rgba(122,31,43,.12);background:#fff}
   table.children input.bad,table.children select.bad{border-color:var(--wine);background:#fff6f7}
   .hidden{display:none !important}
@@ -889,7 +892,7 @@
   function childRow(i){
     var tr=document.createElement('tr');var html='<td>'+i+'</td>';
     CHILD_COLS.forEach(function(c){
-      var isText=(c[2]==='mother1'||c[2]==='req');
+      var isText=(c[1]==='text'&&(c[2]==='mother1'||c[2]==='req'));
       var isWord=(c[1]==='word');
       if(c[1]==='doc'){
         html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype=""><option value="" selected>—</option>'+DOC_OPTIONS+'</select></td>';
