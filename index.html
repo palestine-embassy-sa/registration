@@ -298,6 +298,15 @@
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
         <div class="field">
+          <label>الجنس <span class="req">*</span> <span class="info" data-tip="اختر الجنس: ذكر أو أنثى.">i</span></label>
+          <select name="gender" id="gender" required>
+            <option value="" disabled selected>— اختر —</option>
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
           <label>الحالة الاجتماعية <span class="req">*</span> <span class="info" data-tip="اختر حالتك: أعزب/متزوج/مطلق/أرمل.">i</span></label>
           <select name="marital_status" id="marital" required>
             <option value="" disabled selected>— اختر —</option>
@@ -426,7 +435,7 @@
             <th>الاسم الأول <span class="req">*</span></th><th>الثاني <span class="req">*</span></th>
             <th>الثالث <span class="req">*</span></th><th>الرابع <span class="req">*</span></th>
             <th>اسم الأم <span class="req">*</span> <span class="info" data-tip="اسم الأم الأول فقط بالحروف العربية.">i</span></th>
-            <th>مكان الميلاد <span class="req">*</span> <span class="info" data-tip="مدينة/بلد الميلاد بالحروف العربية.">i</span></th><th>تاريخ الميلاد <span class="req">*</span> <span class="info" data-tip="تاريخ الميلاد حسب التقويم الميلادي.">i</span></th>
+            <th>مكان الميلاد <span class="req">*</span> <span class="info" data-tip="مدينة/بلد الميلاد بالحروف العربية.">i</span></th><th>تاريخ الميلاد <span class="req">*</span> <span class="info" data-tip="تاريخ الميلاد حسب التقويم الميلادي.">i</span></th><th>الجنس <span class="req">*</span> <span class="info" data-tip="ذكر أو أنثى.">i</span></th>
             <th>رقم الإقامة السعودية <span class="req">*</span> <span class="info" data-tip="رقم الإقامة السعودية المكوّن من 10 أرقام.">i</span></th><th>رقم الهوية الفلسطينية <span class="info" data-tip="رقم الهوية الفلسطينية 9 أرقام (اختياري).">i</span></th>
             <th>نوع الجواز <span class="info" data-tip="اختر نوع الجواز؛ فلسطيني أو غيره.">i</span></th><th>رقم الجواز <span class="info" data-tip="رقم الجواز (أرقام فقط).">i</span></th>
           </tr></thead>
@@ -872,7 +881,7 @@
   var CHILD_DOC_OPTIONS = '<option>فلسطيني</option><option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>';
   var CHILD_COLS=[
     ['n1','word','word'],['n2','word','word'],['n3','word','word'],['n4','word','word'],
-    ['mother_name','text','mother1'],['birth_place','text','req'],['birth_date','date','req'],
+    ['mother_name','text','mother1'],['birth_place','text','req'],['birth_date','date','req'],['gender','gsel','req'],
     ['saudi_residency','text','res10'],['palestinian_id','text','id9opt'],
     ['passport_type','cdoc',''],['passport_no','text','optdigits']
   ];
@@ -887,6 +896,8 @@
       }else if(c[1]==='cdoc'){
         html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="" data-cdoc="'+i+'"><option value="" selected>—</option>'+CHILD_DOC_OPTIONS+'</select>'+
           '<input name="child'+i+'_passport_type_other" data-cdocother="'+i+'" placeholder="حدد النوع" style="display:none;margin-top:4px"></td>';
+      }else if(c[1]==='gsel'){
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="req"><option value="" selected>—</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></td>';
       }else if(isWord){
         html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word data-cvtype="word"></td>';
       }else{
@@ -940,7 +951,7 @@
     function bad(el){if(!firstBad)firstBad=el;}
 
     // top selects
-    ['reason','marital','region'].forEach(function(id){var el=document.getElementById(id);var b=!el.value;setInvalid(el,b);if(b)bad(el);});
+    ['reason','gender','marital','region'].forEach(function(id){var el=document.getElementById(id);var b=!el.value;setInvalid(el,b);if(b)bad(el);});
     // applicant required + rules
     var mn=document.querySelector('[name="mother_name"]');
     // four separate name parts
