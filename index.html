@@ -38,7 +38,7 @@
   .field label .req{color:var(--wine);margin-inline-start:4px}
   .field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);padding:10px 13px;font-family:inherit;font-size:14.5px;color:var(--ink);background:var(--field-bg);transition:border-color .15s,box-shadow .15s}
   /* iOS Safari: date/text inputs otherwise overflow their container */
-  .field input[type=date],.field input{-webkit-appearance:none;appearance:none}
+  .field input[type=date],.field input:not([type=radio]):not([type=checkbox]){-webkit-appearance:none;appearance:none}
   .field input[type=date]{min-height:42px;display:block}
   .field select{border-radius:22px;appearance:none;padding-inline-start:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A1F2B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 3px rgba(122,31,43,.13)}
@@ -126,8 +126,11 @@
   .tcbtn.active{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;box-shadow:0 6px 18px rgba(122,31,43,.25)}
   .tcbtn.active span{color:rgba(255,255,255,.85)}
   .yesno{display:flex;gap:22px;padding:4px 2px}
-  .yn{display:flex;align-items:center;gap:7px;font-weight:700;font-size:14.5px;cursor:pointer}
-  .yn input{width:18px;height:18px;accent-color:var(--wine)}
+  .yn{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;cursor:pointer}
+  .yn input[type=radio]{-webkit-appearance:none;appearance:none;width:22px!important;height:22px!important;min-width:22px!important;max-width:22px!important;min-height:22px!important;border:2px solid var(--line-strong);border-radius:50%;margin:0;padding:0!important;cursor:pointer;position:relative;background:#fff;transition:border-color .15s,background .15s;flex:0 0 auto;box-sizing:border-box}
+  .yn input[type=radio]:checked{border-color:var(--wine);background:#fff}
+  .yn input[type=radio]:checked::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:var(--wine)}
+  .yn input[type=radio]:focus{outline:none;box-shadow:0 0 0 3px rgba(122,31,43,.15)}
   /* found -> choice */
   #gateFound{display:none;margin-top:22px;border-top:1px dashed var(--wine-line);padding-top:20px}
   #gateFound .who{background:var(--label-bg);border:1px solid var(--line-strong);border-radius:10px;padding:12px 14px;font-weight:700;margin-bottom:16px}
@@ -362,9 +365,9 @@
         </div>
         <div class="field hidden" data-passgrp="1"><label>تاريخ انتهاء الجواز <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء جواز السفر.">i</span></label><input type="date" name="passport_expiry" id="passport_expiry"><div class="err-msg">هذا الحقل مطلوب</div></div>
 
-        <!-- Q2: هل تملك وثيقة سفر؟ (shown if hasPassport = no) -->
-        <div class="field full hidden" id="wathiqaQwrap">
-          <label>هل تملك وثيقة سفر؟ <span class="req">*</span> <span class="info" data-tip="إن لم يكن لديك جواز فلسطيني، يجب أن تملك وثيقة سفر.">i</span></label>
+        <!-- Q2: هل تملك وثيقة سفر؟ (always shown) -->
+        <div class="field full" id="wathiqaQwrap">
+          <label>هل تملك وثيقة سفر؟ <span class="req">*</span> <span class="info" data-tip="أجب عن السؤالين؛ يجب أن تملك جوازاً أو وثيقة سفر على الأقل.">i</span></label>
           <div class="yesno">
             <label class="yn"><input type="radio" name="hasWathiqa" value="yes" onchange="toggleTravelDocs()"> نعم</label>
             <label class="yn"><input type="radio" name="hasWathiqa" value="no" onchange="toggleTravelDocs()"> لا</label>
@@ -633,15 +636,16 @@
       });
       // split stored full_name into the 4 applicant name fields
       if(seed.full_name)splitName(seed.full_name,['name1','name2','name3','name4']);
-      // restore passport/wathiqa answers from stored record
-      (function(){
+      // restore passport/wathiqa answers ONLY when updating an existing record
+      if(isUpdate)(function(){
         var hasP=(seed.passport_no&&String(seed.passport_no).trim()!=='');
         var hasW=(seed.travel_doc_type&&String(seed.travel_doc_type).trim()!=='');
-        if(hasP){var r=document.querySelector('input[name="hasPassport"][value="yes"]');if(r){r.checked=true;}}
-        else if(hasW){var r2=document.querySelector('input[name="hasPassport"][value="no"]');if(r2){r2.checked=true;}
-          var w=document.querySelector('input[name="hasWathiqa"][value="yes"]');if(w){w.checked=true;}}
+        // only set an answer when we actually know it; leave unanswered otherwise
+        if(hasP){var pYes=document.querySelector('input[name="hasPassport"][value="yes"]');if(pYes)pYes.checked=true;}
+        else{var pNo=document.querySelector('input[name="hasPassport"][value="no"]');if(pNo)pNo.checked=true;}
+        if(hasW){var wYes=document.querySelector('input[name="hasWathiqa"][value="yes"]');if(wYes)wYes.checked=true;}
+        else{var wNo=document.querySelector('input[name="hasWathiqa"][value="no"]');if(wNo)wNo.checked=true;}
         toggleTravelDocs();
-        // re-apply stored values after fields are shown
         if(hasP){var pno=document.getElementById('passport_no');if(pno)pno.value=seed.passport_no||'';var pex=document.getElementById('passport_expiry');if(pex&&seed.passport_expiry)pex.value=seed.passport_expiry;}
         if(hasW){var dt=document.getElementById('travel_doc_type');if(dt)dt.value=seed.travel_doc_type||'';toggleTravelDocs();
           var dn=document.getElementById('travel_doc_no');if(dn)dn.value=seed.travel_doc_no||'';
@@ -731,23 +735,19 @@
     var hasPass=document.querySelector('input[name="hasPassport"]:checked');
     var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
     var passYes = hasPass && hasPass.value==='yes';
-    var passNo  = hasPass && hasPass.value==='no';
-    // passport fields
+    // passport fields shown only if passport = yes
     document.querySelectorAll('[data-passgrp]').forEach(function(el){
       el.classList.toggle('hidden',!passYes);
       if(!passYes){var inp=el.querySelector('input'); if(inp)inp.value='';}
     });
-    // show wathiqa question only if no passport
-    document.getElementById('wathiqaQwrap').classList.toggle('hidden',!passNo);
-    if(!passNo){ // clear wathiqa answer + fields when passport=yes or unanswered
-      document.querySelectorAll('input[name="hasWathiqa"]').forEach(function(r){r.checked=false;});
-    }
-    var wathYes = passNo && hasWath && hasWath.value==='yes';
+    // wathiqa question ALWAYS visible now
+    document.getElementById('wathiqaQwrap').classList.remove('hidden');
+    var wathYes = hasWath && hasWath.value==='yes';
     document.querySelectorAll('[data-docgrp]').forEach(function(el){
       el.classList.toggle('hidden',!wathYes);
       if(!wathYes){var inp=el.querySelector('input,select'); if(inp)inp.value='';}
     });
-    // doc-other only if wathiqa shown and type=أخرى
+    // doc-other only if wathiqa=yes and type=أخرى
     var showOther = wathYes && docSel.value==='أخرى';
     docOtherWrap.classList.toggle('hidden',!showOther);
     if(!showOther){var o=docOtherWrap.querySelector('input'); if(o&&!wathYes)o.value='';}
@@ -956,37 +956,37 @@
     // palestinian id optional but if filled must be 9
     var pidOK=pid.value===''||digitsN(pid.value,9);setInvalid(pid,!pidOK);if(!pidOK)bad(pid);
 
-    // travel documents: passport OR wathiqa, at least one
+    // travel documents: both questions answered, at least one = yes
     (function(){
       var hasPass=document.querySelector('input[name="hasPassport"]:checked');
-      var hasPassErr=document.getElementById('hasPassportErr');
-      var hasPassField=hasPassErr.closest('.field');
-      if(!hasPass){ hasPassField.classList.add('invalid'); bad(hasPassField.querySelector('input')); return; }
-      hasPassField.classList.remove('invalid');
+      var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
+      var passField=document.getElementById('hasPassportErr').closest('.field');
+      var wathField=document.getElementById('hasWathiqaErr').closest('.field');
+      document.getElementById('hasPassportErr').textContent='هذا الحقل مطلوب';
+      document.getElementById('hasWathiqaErr').textContent='هذا الحقل مطلوب';
+      // both must be answered
+      if(!hasPass){ passField.classList.add('invalid'); bad(passField.querySelector('input')); } else passField.classList.remove('invalid');
+      if(!hasWath){ wathField.classList.add('invalid'); bad(wathField.querySelector('input')); } else wathField.classList.remove('invalid');
+      if(!hasPass || !hasWath) return;
+      // at least one yes
+      if(hasPass.value==='no' && hasWath.value==='no'){
+        passField.classList.add('invalid'); wathField.classList.add('invalid');
+        document.getElementById('hasWathiqaErr').textContent='يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل';
+        bad(passField.querySelector('input')); return;
+      }
+      // passport = yes -> passport fields required
       if(hasPass.value==='yes'){
-        // passport required: number (digits) + expiry
         var pno=document.getElementById('passport_no'), pex=document.getElementById('passport_expiry');
         var pnoOK=pno.value.trim()!==''&&digitsOnly(pno.value); setInvalid(pno,!pnoOK); if(!pnoOK)bad(pno);
         var pexOK=!!pex.value; setInvalid(pex,!pexOK); if(!pexOK)bad(pex);
-      }else{
-        // no passport -> wathiqa question required
-        var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
-        var hasWathErr=document.getElementById('hasWathiqaErr');
-        var hasWathField=hasWathErr.closest('.field');
-        if(!hasWath){ hasWathField.classList.add('invalid'); bad(hasWathField.querySelector('input')); return; }
-        hasWathField.classList.remove('invalid');
-        if(hasWath.value==='yes'){
-          var dt=document.getElementById('travel_doc_type'), dn=document.getElementById('travel_doc_no'), de=document.getElementById('travel_doc_expiry');
-          var dtOK=!!dt.value; setInvalid(dt,!dtOK); if(!dtOK)bad(dt);
-          if(dt.value==='أخرى'){var oth=document.querySelector('[name="travel_doc_type_other"]');var oOK=oth.value.trim()!=='';setInvalid(oth,!oOK);if(!oOK)bad(oth);}
-          var dnOK=dn.value.trim()!==''; setInvalid(dn,!dnOK); if(!dnOK)bad(dn);
-          var deOK=!!de.value; setInvalid(de,!deOK); if(!deOK)bad(de);
-        }else{
-          // said no to both -> must have at least one
-          hasWathField.classList.add('invalid');
-          document.getElementById('hasWathiqaErr').textContent='يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل';
-          bad(hasWathField.querySelector('input'));
-        }
+      }
+      // wathiqa = yes -> wathiqa fields required
+      if(hasWath.value==='yes'){
+        var dt=document.getElementById('travel_doc_type'), dn=document.getElementById('travel_doc_no'), de=document.getElementById('travel_doc_expiry');
+        var dtOK=!!dt.value; setInvalid(dt,!dtOK); if(!dtOK)bad(dt);
+        if(dt.value==='أخرى'){var oth=document.querySelector('[name="travel_doc_type_other"]');var oOK=oth.value.trim()!=='';setInvalid(oth,!oOK);if(!oOK)bad(oth);}
+        var dnOK=dn.value.trim()!==''; setInvalid(dn,!dnOK); if(!dnOK)bad(dn);
+        var deOK=!!de.value; setInvalid(de,!deOK); if(!deOK)bad(de);
       }
     })();
 
