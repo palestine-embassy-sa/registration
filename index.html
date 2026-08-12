@@ -320,11 +320,21 @@
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
+        <div class="field hidden" id="wifeNameField">
+          <label>اسم الزوجة الرباعي <span class="req">*</span> <span class="info" data-tip="اسم الزوجة الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>
+          <input name="wife_name" id="wife_name" data-ar placeholder="الاسم الأول الثاني الثالث الرابع">
+          <div class="err-msg">مطلوب — أربعة أسماء بالحروف العربية</div>
+        </div>
         <div class="field hidden" id="wifeNatField">
           <label>جنسية الزوجة <span class="req">*</span> <span class="info" data-tip="اختر جنسية الزوجة.">i</span></label>
           <select name="wife_nationality" id="wife_nationality">
             <option value="" disabled selected>— اختر —</option>
           </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field hidden" id="wifeNatOtherField">
+          <label>حدد جنسية الزوجة <span class="req">*</span> <span class="info" data-tip="اكتب الجنسية إذا اخترت «أخرى».">i</span></label>
+          <input name="wife_nationality_other" id="wife_nationality_other" data-ar placeholder="اكتب الجنسية">
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
         <div class="field"><label>المهنة <span class="req">*</span> <span class="info" data-tip="مهنتك الحالية بالحروف العربية.">i</span></label><input name="occupation" id="occupation" data-ar required><div class="err-msg">هذا الحقل مطلوب</div></div>
@@ -756,17 +766,32 @@
       childrenSection=document.getElementById('childrenSection'),childrenCount=document.getElementById('childrenCount');
   function isMarried(){return marital.value==='متزوج / متزوجة';}
   // family sections removed; only wife nationality is collected for married/divorced/widowed
+  var wifeNameField=document.getElementById('wifeNameField');
+  var wifeNameInput=document.getElementById('wife_name');
   var wifeNatField=document.getElementById('wifeNatField');
   var wifeNatSel=document.getElementById('wife_nationality');
+  var wifeNatOtherField=document.getElementById('wifeNatOtherField');
+  var wifeNatOtherInput=document.getElementById('wife_nationality_other');
   if(wifeNatSel){ wifeNatSel.innerHTML='<option value="" disabled selected>— اختر —</option>'+NAT_OPTIONS; }
+  function syncWifeNatOther(){
+    var isOther = wifeNatSel && wifeNatSel.value==='أخرى';
+    if(wifeNatOtherField){
+      wifeNatOtherField.classList.toggle('hidden',!isOther);
+      if(!isOther && wifeNatOtherInput) wifeNatOtherInput.value='';
+    }
+  }
   function syncWifeNat(){
     var v=marital.value;
     var show=(v==='متزوج / متزوجة'||v==='مطلق / مطلقة'||v==='أرمل / أرملة');
+    if(wifeNameField){ wifeNameField.classList.toggle('hidden',!show); if(!show && wifeNameInput) wifeNameInput.value=''; }
     if(wifeNatField){
       wifeNatField.classList.toggle('hidden',!show);
       if(!show && wifeNatSel) wifeNatSel.value='';
     }
+    if(!show){ if(wifeNatOtherField) wifeNatOtherField.classList.add('hidden'); if(wifeNatOtherInput) wifeNatOtherInput.value=''; }
+    else syncWifeNatOther();
   }
+  if(wifeNatSel) wifeNatSel.addEventListener('change',syncWifeNatOther);
   marital.addEventListener('change',syncWifeNat);
 
   // ===== wife block = same ID/travel block as applicant =====
@@ -947,10 +972,15 @@
 
     // top selects
     ['reason','gender','marital','region'].forEach(function(id){var el=document.getElementById(id);var b=!el.value;setInvalid(el,b);if(b)bad(el);});
-    // wife nationality required when married/divorced/widowed
+    // wife name + nationality required when married/divorced/widowed
     (function(){
       var mv=marital.value, show=(mv==='متزوج / متزوجة'||mv==='مطلق / مطلقة'||mv==='أرمل / أرملة');
-      if(show && wifeNatSel){var b=!wifeNatSel.value;setInvalid(wifeNatSel,b);if(b)bad(wifeNatSel);}
+      if(!show)return;
+      if(wifeNameInput){var nok=fourArabicOK(wifeNameInput.value);setInvalid(wifeNameInput,!nok);if(!nok)bad(wifeNameInput);}
+      if(wifeNatSel){var b=!wifeNatSel.value;setInvalid(wifeNatSel,b);if(b)bad(wifeNatSel);}
+      if(wifeNatSel && wifeNatSel.value==='أخرى' && wifeNatOtherInput){
+        var ook=wifeNatOtherInput.value.trim()!=='';setInvalid(wifeNatOtherInput,!ook);if(!ook)bad(wifeNatOtherInput);
+      }
     })();
     // applicant required + rules
     var mn=document.querySelector('[name="mother_name"]');
