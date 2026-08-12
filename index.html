@@ -203,7 +203,7 @@
             <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
             <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
             <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
-            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option value="أخرى">أخرى</option>
+            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option>لا يوجد</option><option value="أخرى">أخرى</option>
           </select>
         </div>
         <div class="choice">
@@ -230,7 +230,7 @@
             <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
             <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
             <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
-            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option value="أخرى">أخرى</option>
+            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option>لا يوجد</option><option value="أخرى">أخرى</option>
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
@@ -261,9 +261,9 @@
           <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
         </div>
         <div class="field">
-          <label>الاسم الرابع (العائلة) <span class="req">*</span> <span class="info" data-tip="اسم العائلة بالحروف العربية.">i</span></label>
-          <input name="name4" id="name4" data-word required placeholder="اسم العائلة">
-          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+          <label>الاسم الرابع (العائلة) <span class="req">*</span> <span class="info" data-tip="اسم العائلة بالحروف العربية (حتى 3 كلمات).">i</span></label>
+          <input name="name4" id="name4" data-word3 required placeholder="اسم العائلة">
+          <div class="err-msg">مطلوب — بالحروف العربية (حتى 3 كلمات)</div>
         </div>
         <input type="hidden" name="full_name" id="full_name">
         <div class="field">
@@ -317,6 +317,13 @@
             <option value="متزوج / متزوجة">متزوج / متزوجة</option>
             <option value="مطلق / مطلقة">مطلق / مطلقة</option>
             <option value="أرمل / أرملة">أرمل / أرملة</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field hidden" id="wifeNatField">
+          <label>جنسية الزوجة <span class="req">*</span> <span class="info" data-tip="اختر جنسية الزوجة.">i</span></label>
+          <select name="wife_nationality" id="wife_nationality">
+            <option value="" disabled selected>— اختر —</option>
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
@@ -406,47 +413,6 @@
       </div>
     </div>
 
-    <!-- Wives -->
-    <div class="section hidden" id="wivesSection">
-      <div class="bar"><span class="num">3</span>بيانات الزوجات</div>
-      <div class="count-row">
-        <label for="wivesCount">كم عدد الزوجات؟</label>
-        <select id="wivesCount">
-          <option value="0" selected>— اختر —</option>
-          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
-        </select>
-      </div>
-      <div id="wivesContainer"></div>
-    </div>
-
-    <!-- Children -->
-    <div class="section hidden" id="childrenSection">
-      <div class="bar"><span class="num">4</span>الأبناء تحت سن 18 سنة</div>
-      <div class="count-row">
-        <label for="childrenCount">كم عدد الأبناء دون سن 18؟</label>
-        <select id="childrenCount">
-          <option value="0" selected>لا يوجد</option>
-          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-          <option value="7">7</option><option value="8">8</option>
-        </select>
-      </div>
-      <div id="childrenWrap" class="tablewrap hidden">
-        <table class="children">
-          <thead><tr>
-            <th>م</th>
-            <th>الاسم الأول <span class="req">*</span></th><th>الثاني <span class="req">*</span></th>
-            <th>الثالث <span class="req">*</span></th><th>الرابع <span class="req">*</span></th>
-            <th>اسم الأم <span class="req">*</span> <span class="info" data-tip="اسم الأم الأول فقط بالحروف العربية.">i</span></th>
-            <th>مكان الميلاد <span class="req">*</span> <span class="info" data-tip="مدينة/بلد الميلاد بالحروف العربية.">i</span></th><th>تاريخ الميلاد <span class="req">*</span> <span class="info" data-tip="تاريخ الميلاد حسب التقويم الميلادي.">i</span></th><th>الجنس <span class="req">*</span> <span class="info" data-tip="ذكر أو أنثى.">i</span></th>
-            <th>رقم الإقامة السعودية <span class="req">*</span> <span class="info" data-tip="رقم الإقامة السعودية المكوّن من 10 أرقام.">i</span></th><th>رقم الهوية الفلسطينية <span class="info" data-tip="رقم الهوية الفلسطينية 9 أرقام (اختياري).">i</span></th>
-            <th>نوع الجواز <span class="info" data-tip="اختر نوع الجواز؛ فلسطيني أو غيره.">i</span></th><th>رقم الجواز <span class="info" data-tip="رقم الجواز (أرقام فقط).">i</span></th>
-          </tr></thead>
-          <tbody id="childrenBody"></tbody>
-        </table>
-      </div>
-    </div>
-
     <div class="actions"><button type="submit" class="submit" id="submitBtn">إرسال الاستمارة</button></div>
     <div class="status" id="status"></div>
     <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
@@ -468,6 +434,18 @@
   // اسم واحد فقط: حروف عربية بدون مسافات أو أرقام
   function arabicWord(el){el.value=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F]/g,'');}
   function arabicWordOK(v){v=(v||'').trim();return v!==''&&/^[\u0600-\u06FF\u0750-\u077F]+$/.test(v);}
+  // اسم العائلة: حروف عربية ومسافات، بحد أقصى 3 كلمات
+  function arabicWords3(el){
+    var v=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F\s]/g,'').replace(/\s{2,}/g,' ');
+    var parts=v.split(' ').filter(Boolean);
+    if(parts.length>3){ v=parts.slice(0,3).join(' ')+(v.endsWith(' ')?'':''); }
+    el.value=v;
+  }
+  function arabicWords3OK(v){
+    v=(v||'').trim(); if(v==='')return false;
+    if(!/^[\u0600-\u06FF\u0750-\u077F\s]+$/.test(v))return false;
+    return v.split(/\s+/).filter(Boolean).length<=3;
+  }
   // يطبّق فلتر العربية على كل الحقول التي تحمل data-ar
   function wireArabic(root){(root||document).querySelectorAll('[data-ar]').forEach(function(el){
     if(el.__arWired)return; el.__arWired=true;
@@ -476,6 +454,10 @@
   (root||document).querySelectorAll('[data-word]').forEach(function(el){
     if(el.__wWired)return; el.__wWired=true;
     el.addEventListener('input',function(){arabicWord(el);});
+  });
+  (root||document).querySelectorAll('[data-word3]').forEach(function(el){
+    if(el.__w3Wired)return; el.__w3Wired=true;
+    el.addEventListener('input',function(){arabicWords3(el);});
   });}
   // خريطة تلميحات حسب نص العنوان (للأقسام المُولّدة: الزوجات/الأبناء)
   var TIP_MAP={
@@ -723,6 +705,7 @@
     v=(v||'').trim();
     if(vtype==='name')return fourArabicOK(v);
     if(vtype==='word')return arabicWordOK(v);
+    if(vtype==='word3')return arabicWords3OK(v);
     if(vtype==='mother1')return oneNameOK(v);
     if(vtype==='id9opt')return v===''||digitsN(v,9);
     if(vtype==='res10')return digitsN(v,10);
@@ -766,21 +749,25 @@
   }
   window.toggleTravelDocs=toggleTravelDocs;
 
-  // ===== marital -> wives + children =====
+  // ===== marital status (wife/children sections removed from form) =====
   var marital=document.getElementById('marital'),
       wivesSection=document.getElementById('wivesSection'),wivesCount=document.getElementById('wivesCount'),
       wivesContainer=document.getElementById('wivesContainer'),
       childrenSection=document.getElementById('childrenSection'),childrenCount=document.getElementById('childrenCount');
   function isMarried(){return marital.value==='متزوج / متزوجة';}
-  marital.addEventListener('change',()=>{
-    var v=marital.value,
-        showFamily=(v==='متزوج / متزوجة'||v==='مطلق / مطلقة'||v==='أرمل / أرملة');
-    wivesSection.classList.toggle('hidden',!showFamily);
-    if(!showFamily){wivesCount.value='0';renderWives(0);}
-    else if(isMarried() && (parseInt(wivesCount.value)||0)===0){wivesCount.value='1';renderWives(1);} // married: at least 1 required
-    childrenSection.classList.toggle('hidden',!showFamily);
-    if(!showFamily){childrenCount.value='0';renderChildren(0);}
-  });
+  // family sections removed; only wife nationality is collected for married/divorced/widowed
+  var wifeNatField=document.getElementById('wifeNatField');
+  var wifeNatSel=document.getElementById('wife_nationality');
+  if(wifeNatSel){ wifeNatSel.innerHTML='<option value="" disabled selected>— اختر —</option>'+NAT_OPTIONS; }
+  function syncWifeNat(){
+    var v=marital.value;
+    var show=(v==='متزوج / متزوجة'||v==='مطلق / مطلقة'||v==='أرمل / أرملة');
+    if(wifeNatField){
+      wifeNatField.classList.toggle('hidden',!show);
+      if(!show && wifeNatSel) wifeNatSel.value='';
+    }
+  }
+  marital.addEventListener('change',syncWifeNat);
 
   // ===== wife block = same ID/travel block as applicant =====
   function wifeBlock(i){
@@ -817,13 +804,13 @@
   }
   // يبني 4 حقول اسم منفصلة + حقل مخفي يجمعها
   function nameFields(P, lbl){
-    function one(n,label,ph){
+    function one(n,label,ph,three){
       return '<div class="field"><label>'+label+' <span class="req">*</span></label>'+
-        '<input name="'+P+n+'" data-word data-vtype="word" placeholder="'+ph+'">'+
-        '<div class="err-msg">اسم واحد بالحروف العربية فقط</div></div>';
+        '<input name="'+P+n+'" '+(three?'data-word3 data-vtype="word3"':'data-word data-vtype="word"')+' placeholder="'+ph+'">'+
+        '<div class="err-msg">'+(three?'بالحروف العربية (حتى 3 كلمات)':'اسم واحد بالحروف العربية فقط')+'</div></div>';
     }
     return one('n1',lbl+' — الأول','الأول')+one('n2',lbl+' — الثاني','الثاني')+
-           one('n3',lbl+' — الثالث','الثالث')+one('n4',lbl+' — الرابع','العائلة')+
+           one('n3',lbl+' — الثالث','الثالث')+one('n4',lbl+' — الرابع (العائلة)','العائلة',true)+
            '<input type="hidden" name="'+P+'name">';
   }
   function fld(name,label,req,vtype,msg,ph,extraId){
@@ -839,6 +826,7 @@
       '<div class="err-msg">هذا الحقل مطلوب</div></div>';
   }
   function renderWives(n){
+    if(!wivesContainer)return;
     wivesContainer.innerHTML='';
     for(var i=1;i<=n;i++)wivesContainer.appendChild(wifeBlock(i));
     // wire per-wife: pal id -> passport required, doc other, nationality -> pal fields
@@ -874,7 +862,7 @@
     })(i);
     wireArabic(wivesContainer); wireTips(wivesContainer);
   }
-  wivesCount.addEventListener('change',()=>{
+  if(wivesCount)wivesCount.addEventListener('change',()=>{
     var n=parseInt(wivesCount.value)||0;
     if(isMarried()&&n===0){n=1;wivesCount.value='1';} // married must have >=1
     renderWives(n);
@@ -883,7 +871,7 @@
   // ===== children table: id9 optional, res10 required, passport optional digits =====
   var CHILD_DOC_OPTIONS = '<option>فلسطيني</option><option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>';
   var CHILD_COLS=[
-    ['n1','word','word'],['n2','word','word'],['n3','word','word'],['n4','word','word'],
+    ['n1','word','word'],['n2','word','word'],['n3','word','word'],['n4','word3','word3'],
     ['mother_name','text','mother1'],['birth_place','text','req'],['birth_date','date','req'],['gender','gsel','req'],
     ['saudi_residency','text','res10'],['palestinian_id','text','id9opt'],
     ['passport_type','cdoc',''],['passport_no','text','optdigits']
@@ -894,6 +882,7 @@
     CHILD_COLS.forEach(function(c){
       var isText=(c[1]==='text'&&(c[2]==='mother1'||c[2]==='req'));
       var isWord=(c[1]==='word');
+      var isWord3=(c[1]==='word3');
       if(c[1]==='doc'){
         html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype=""><option value="" selected>—</option>'+DOC_OPTIONS+'</select></td>';
       }else if(c[1]==='cdoc'){
@@ -901,6 +890,8 @@
           '<input name="child'+i+'_passport_type_other" data-cdocother="'+i+'" placeholder="حدد النوع" style="display:none;margin-top:4px"></td>';
       }else if(c[1]==='gsel'){
         html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="req"><option value="" selected>—</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></td>';
+      }else if(isWord3){
+        html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word3 data-cvtype="word3"></td>';
       }else if(isWord){
         html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word data-cvtype="word"></td>';
       }else{
@@ -914,6 +905,7 @@
     tr.innerHTML=html;return tr;
   }
   function renderChildren(n){
+    if(!childrenBody)return;
     childrenBody.innerHTML='';
     for(var i=1;i<=n;i++)childrenBody.appendChild(childRow(i));
     childrenWrap.classList.toggle('hidden',n===0);
@@ -927,7 +919,7 @@
     })(i);
     wireArabic(childrenBody);
   }
-  childrenCount.addEventListener('change',()=>renderChildren(parseInt(childrenCount.value)||0));
+  if(childrenCount)childrenCount.addEventListener('change',()=>renderChildren(parseInt(childrenCount.value)||0));
 
   // ===== live validation (applicant) =====
   var fullName=document.getElementById('full_name'),mobile=document.getElementById('mobile'),email=document.getElementById('email'),
@@ -955,11 +947,16 @@
 
     // top selects
     ['reason','gender','marital','region'].forEach(function(id){var el=document.getElementById(id);var b=!el.value;setInvalid(el,b);if(b)bad(el);});
+    // wife nationality required when married/divorced/widowed
+    (function(){
+      var mv=marital.value, show=(mv==='متزوج / متزوجة'||mv==='مطلق / مطلقة'||mv==='أرمل / أرملة');
+      if(show && wifeNatSel){var b=!wifeNatSel.value;setInvalid(wifeNatSel,b);if(b)bad(wifeNatSel);}
+    })();
     // applicant required + rules
     var mn=document.querySelector('[name="mother_name"]');
     // four separate name parts
     var nameParts=[document.getElementById('name1'),document.getElementById('name2'),document.getElementById('name3'),document.getElementById('name4')];
-    nameParts.forEach(function(el){var ok=arabicWordOK(el.value);setInvalid(el,!ok);if(!ok)bad(el);});
+    nameParts.forEach(function(el,idx){var ok=(idx===3)?arabicWords3OK(el.value):arabicWordOK(el.value);setInvalid(el,!ok);if(!ok)bad(el);});
     // combine into hidden full_name
     document.getElementById('full_name').value=nameParts.map(function(e){return e.value.trim();}).join(' ');
     [[mn,oneNameOK(mn.value)],
@@ -1004,53 +1001,12 @@
       }
     })();
 
-    // wives: every field validated by its data-vtype
-    if(isMarried()){
-      var wc=parseInt(wivesCount.value)||0;
-      if(wc<1){ // force at least one
-        wivesCount.value='1';renderWives(1);wc=1;
-      }
-    }
-    wivesContainer.querySelectorAll('[data-vtype]').forEach(function(el){
-      var vt=el.dataset.vtype;
-      // skip fields hidden by nationality (offsetParent null = not visible)
-      var fieldWrap=el.closest('.field');
-      if(fieldWrap && (fieldWrap.classList.contains('hidden') || fieldWrap.offsetParent===null)) return;
-      // wife passport becomes required if that wife's palestinian id is filled
-      if(/^wife\d+_passport_no$/.test(el.name)){
-        var wi=el.name.match(/^wife(\d+)_/)[1];
-        var wpid=wivesContainer.querySelector('[name="wife'+wi+'_palestinian_id"]');
-        var need=wpid&&wpid.value.trim()!=='';
-        var ok=need?(el.value.trim()!==''&&digitsOnly(el.value)):(el.value===''||digitsOnly(el.value));
-        setInvalid(el,!ok);if(!ok)bad(el);return;
-      }
-      var ok=ruleOK(el.value,vt);setInvalid(el,!ok);if(!ok)bad(el);
-    });
-
-    // children: each cell by data-cvtype
-    childrenBody.querySelectorAll('[data-cvtype]').forEach(function(el){
-      var ok=ruleOK(el.value,el.dataset.cvtype);el.classList.toggle('bad',!ok);if(!ok)bad(el);
-    });
+    // (wife/children sections removed from the form)
 
     if(firstBad){firstBad.focus();firstBad.scrollIntoView({behavior:'smooth',block:'center'});
       statusEl.textContent='يرجى تصحيح الحقول المميزة بالأحمر';statusEl.classList.add('err');return;}
 
-    // combine 4-part names into wife{i}_name and child{i}_name hidden fields
-    (function(){
-      var wc=parseInt(wivesCount.value)||0;
-      for(var w=1;w<=wc;w++){
-        var parts=['n1','n2','n3','n4'].map(function(n){var el=wivesContainer.querySelector('[name="wife'+w+'_'+n+'"]');return el?el.value.trim():'';});
-        var h=wivesContainer.querySelector('[name="wife'+w+'_name"]'); if(h)h.value=parts.join(' ').trim();
-      }
-      var cc=parseInt(childrenCount.value)||0;
-      for(var c=1;c<=cc;c++){
-        var cparts=['n1','n2','n3','n4'].map(function(n){var el=childrenBody.querySelector('[name="child'+c+'_'+n+'"]');return el?el.value.trim():'';});
-        var ch=childrenBody.querySelector('[name="child'+c+'_name"]'); if(ch)ch.value=cparts.join(' ').trim();
-      }
-    })();
-
     var data={};new FormData(form).forEach((v,k)=>data[k]=v);
-    data.wives_count=wivesCount.value||'0';data.children_count=childrenCount.value||'0';
     data.submitted_at=new Date().toISOString();
 
     btn.disabled=true;btn.textContent='جارٍ الإرسال…';
