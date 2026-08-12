@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استمارة تسجيل مواطن — سفارة دولة فلسطين</title>
+<style>
+  :root{--wine:#7A1F2B;--wine-soft:#8f3742;--wine-line:#e3cfd2;--gold:#B8860B;--gold-soft:#d9b24a;
+    --ink:#2a2226;--muted:#6b6169;--line:#e7e2e4;--line-strong:#c9bfc3;--page:#f7f4f2;--card:#fff;
+    --label-bg:#faf6f3;--notice-bg:#fbeef0;--field-bg:#fffdfc;--radius:12px;--radius-sm:9px;}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Segoe UI","Tahoma",Arial,sans-serif;background:var(--page);color:var(--ink);line-height:1.6;font-size:15px;padding:26px 12px}
+  .sheet{max-width:940px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 40px rgba(122,31,43,.10)}
+  .head{position:relative;padding:34px 30px 28px;background:radial-gradient(120% 140% at 100% 0%,rgba(184,134,11,.10),transparent 55%),radial-gradient(120% 140% at 0% 0%,rgba(122,31,43,.08),transparent 55%),linear-gradient(180deg,#fffdfb,#fbf7f4);border-bottom:1px solid var(--wine-line)}
+  .head-inner{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+  .head .side{text-align:center}
+  .head .crest{flex:0 0 auto;width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#fff,#fbf3e7 70%,#f3e6cf);border:2px solid var(--gold-soft);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(184,134,11,.18)}
+  .head .crest img{width:70px}
+  .head .state{font-size:26px;font-weight:800;color:var(--wine)}
+  .head .sub{font-size:15px;font-weight:600;color:var(--muted);margin-top:5px}
+  .title-wrap{text-align:center;padding:20px 30px 0}
+  .title-wrap h1{display:inline-block;margin:0;font-size:24px;font-weight:800;color:var(--wine)}
+  .title-wrap::after{content:"";display:block;width:80px;height:3px;margin:12px auto 0;background:linear-gradient(90deg,var(--gold-soft),var(--wine),var(--gold-soft));border-radius:3px}
+  .notice{margin:18px 30px 0;background:var(--notice-bg);border:1px solid #e8b9c1;color:#8a2233;font-weight:700;font-size:13.5px;padding:12px 16px;border-radius:var(--radius-sm);text-align:center}
+  form{padding:10px 30px 30px}
+  .section{margin-top:24px}
+  .section>.bar{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;font-weight:700;font-size:16px;padding:11px 18px;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:11px}
+  .section>.bar .num{background:rgba(255,255,255,.9);color:var(--wine);width:25px;height:25px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;border:1px solid var(--line-strong);border-top:none;border-radius:0 0 var(--radius) var(--radius);background:#fff}
+  .field{display:flex;flex-direction:column}
+  .field.full{grid-column:1 / -1}
+  .field label{font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:8px}
+  .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gold);color:var(--gold);font-size:11px;font-weight:700;font-style:italic;line-height:1;margin-inline-start:6px;cursor:help;position:relative;vertical-align:middle;font-family:Georgia,'Times New Roman',serif;flex:0 0 auto}
+  table.children th .info{border-color:rgba(255,255,255,.75);color:#fff}
+  .info:hover::after,.info.show::after{content:attr(data-tip);position:absolute;bottom:135%;right:50%;transform:translateX(50%);background:var(--ink);color:#fff;font-weight:500;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:normal;width:190px;text-align:right;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  .info:hover::before,.info.show::before{content:"";position:absolute;bottom:135%;right:50%;transform:translateX(50%) translateY(100%);border:6px solid transparent;border-top-color:var(--ink);z-index:40}
+  .field label .req{color:var(--wine);margin-inline-start:4px}
+  .field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);padding:10px 13px;font-family:inherit;font-size:14.5px;color:var(--ink);background:var(--field-bg);transition:border-color .15s,box-shadow .15s}
+  /* iOS Safari: date/text inputs otherwise overflow their container */
+  .field input[type=date],.field input:not([type=radio]):not([type=checkbox]){-webkit-appearance:none;appearance:none}
+  .field input[type=date]{min-height:42px;display:block}
+  .field select{border-radius:22px;appearance:none;padding-inline-start:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A1F2B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 3px rgba(122,31,43,.13)}
+  .field textarea{resize:vertical;min-height:54px;border-radius:var(--radius-sm)}
+  .field .err-msg{color:var(--wine);font-size:12px;margin-top:4px;font-weight:600;display:none}
+  .field.invalid input,.field.invalid select{border-color:var(--wine);background:#fff6f7}
+  .field.invalid .err-msg{display:block}
+  .count-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 0 6px}
+  .count-row label{font-weight:700;font-size:14px}
+  .count-row select{padding:9px 16px;border:1.5px solid var(--line-strong);border-radius:22px;font-family:inherit;font-size:14.5px;min-width:130px;background:var(--field-bg);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A1F2B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 14px center}
+  .wifecard{border:1px solid var(--line-strong);border-radius:var(--radius);margin-top:14px;overflow:hidden}
+  .wifecard .wt{background:var(--label-bg);color:var(--wine);font-weight:800;padding:9px 16px;border-bottom:1px solid var(--line-strong)}
+  .wifecard .grid{border:none;border-radius:0}
+  .tablewrap{border:1px solid var(--line-strong);border-top:none;overflow-x:auto;border-radius:0 0 var(--radius) var(--radius)}
+  table.children{width:100%;border-collapse:collapse;min-width:1180px}
+  table.children th{background:var(--wine);color:#fff;font-weight:700;font-size:12px;padding:9px 6px;border:1px solid var(--wine-soft);text-align:center;white-space:nowrap}
+  table.children th .req{color:#ffd7dc}
+  table.children td{border:1px solid var(--line);padding:4px;text-align:center;background:#fff}
+  table.children td:first-child{background:var(--label-bg);font-weight:700;width:36px}
+  table.children input,table.children select{width:100%;min-width:120px;border:1px solid transparent;border-radius:7px;padding:8px 6px;font-family:inherit;font-size:13.5px;text-align:center;background:transparent}
+  table.children input[type=date]{-webkit-appearance:none;appearance:none;background:#fff;border:1px solid var(--line);min-height:38px;text-align:center;color:var(--ink)}
+  table.children input[type=date]::-webkit-date-and-time-value{text-align:center}
+  table.children input[type=date]::-webkit-calendar-picker-indicator{opacity:.6}
+  table.children input:focus,table.children select:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 2px rgba(122,31,43,.12);background:#fff}
+  table.children input.bad,table.children select.bad{border-color:var(--wine);background:#fff6f7}
+  .hidden{display:none !important}
+  .actions{margin-top:28px;display:flex;justify-content:center}
+  button.submit{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;border:none;font-family:inherit;font-weight:800;font-size:16px;padding:14px 44px;border-radius:26px;cursor:pointer;box-shadow:0 6px 18px rgba(122,31,43,.25)}
+  button.submit:hover{transform:translateY(-1px)}
+  button.submit:disabled{opacity:.6;cursor:not-allowed}
+  .status{font-size:14px;font-weight:700;text-align:center;margin-top:14px}
+  .status.err{color:var(--wine)}
+  .rights{text-align:center;color:var(--muted);font-size:12.5px;margin-top:26px;padding-top:14px;border-top:2px solid var(--gold-soft)}
+  .done{padding:64px 28px;text-align:center}
+  .done .check{width:78px;height:78px;border-radius:50%;background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;font-size:42px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 8px 22px rgba(122,31,43,.28)}
+  .done h2{color:var(--wine);margin:0 0 10px}
+  .done p{color:var(--muted);margin:0 0 22px}
+  .done button{background:transparent;border:1.5px solid var(--wine);color:var(--wine);font-family:inherit;font-weight:700;padding:11px 26px;border-radius:22px;cursor:pointer}
+  @media(max-width:660px){
+    body{padding:12px 6px;font-size:14.5px}
+    .sheet{border-radius:14px}
+    .head{padding:22px 16px 18px}
+    .head .crest{width:84px;height:84px}
+    .head .crest img{width:56px}
+    .head .state{font-size:21px}
+    .head .sub{font-size:13px}
+    .head-inner{flex-direction:column;text-align:center;gap:12px}
+    .head .side{text-align:center}
+    form{padding:8px 14px 22px}
+    .title-wrap{padding:16px 14px 0}
+    .title-wrap h1{font-size:20px}
+    .notice{margin:14px 14px 0;font-size:12.5px;padding:10px 12px}
+    .grid{grid-template-columns:1fr;padding:14px;gap:12px}
+    .section>.bar{font-size:15px;padding:10px 14px}
+    #gate{padding:22px 16px 30px}
+    .typechoice{gap:10px;margin:8px 0 18px}
+    .tcbtn{font-size:14px;padding:11px 6px}
+    .field input,.field select,.field textarea,#gate input{font-size:16px}  /* 16px prevents iOS zoom */
+    .info{width:17px;height:17px;font-size:11px}
+    .info:hover::after,.info.show::after{width:160px;font-size:11px}
+    /* children table: allow horizontal scroll, keep inputs usable */
+    table.children{min-width:900px}
+    .count-row{gap:8px}
+    button.submit{width:100%;padding:14px}
+  }
+  @media(max-width:400px){
+    .typechoice{flex-direction:column}
+    .head .state{font-size:19px}
+  }
+
+  /* ===== ID gate ===== */
+  #gate{padding:34px 30px 44px}
+  #gate .gcard{max-width:520px;margin:6px auto 0;text-align:center}
+  #gate p.lead{color:var(--muted);font-size:15px;margin:0 0 6px}
+  #gate .gfield{text-align:right;margin-bottom:20px}
+  #gate label{font-weight:700;font-size:13.5px;display:block;margin-bottom:10px}
+  #gate label .req{color:var(--wine)}
+  #gate input{width:100%;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);padding:11px 14px;font-family:inherit;font-size:15px;background:var(--field-bg)}
+  #gate input:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 3px rgba(122,31,43,.13)}
+  #gate .gbtn{width:100%;margin-top:6px;background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;border:none;font-family:inherit;font-weight:800;font-size:16px;padding:13px;border-radius:24px;cursor:pointer}
+  #gate .gbtn:disabled{opacity:.6;cursor:not-allowed}
+  #gate .gerr{color:var(--wine);font-weight:700;font-size:13px;margin-top:12px;min-height:18px}
+  #gate .ghint{color:var(--muted);font-size:12px;margin-top:8px}
+  .typechoice{display:flex;gap:16px;margin:10px 0 22px}
+  .tcbtn{flex:1;background:#fff;border:2px solid var(--wine);color:var(--wine);font-family:inherit;font-weight:800;font-size:15px;padding:12px 8px;border-radius:14px;cursor:pointer;line-height:1.35;transition:all .15s}
+  .tcbtn span{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-top:2px}
+  .tcbtn:hover{background:var(--wine-tint,#f6edee)}
+  .tcbtn.active{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;box-shadow:0 6px 18px rgba(122,31,43,.25)}
+  .tcbtn.active span{color:rgba(255,255,255,.85)}
+  .yesno{display:flex;gap:22px;padding:4px 2px}
+  .yn{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;cursor:pointer}
+  .yn input[type=radio]{-webkit-appearance:none;appearance:none;width:22px!important;height:22px!important;min-width:22px!important;max-width:22px!important;min-height:22px!important;border:2px solid var(--line-strong);border-radius:50%;margin:0;padding:0!important;cursor:pointer;position:relative;background:#fff;transition:border-color .15s,background .15s;flex:0 0 auto;box-sizing:border-box}
+  .yn input[type=radio]:checked{border-color:var(--wine);background:#fff}
+  .yn input[type=radio]:checked::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:var(--wine)}
+  .yn input[type=radio]:focus{outline:none;box-shadow:0 0 0 3px rgba(122,31,43,.15)}
+  /* found -> choice */
+  #gateFound{display:none;margin-top:22px;border-top:1px dashed var(--wine-line);padding-top:20px}
+  #gateFound .who{background:var(--label-bg);border:1px solid var(--line-strong);border-radius:10px;padding:12px 14px;font-weight:700;margin-bottom:16px}
+  #gateFound .who span{color:var(--wine)}
+  #gateFound .choice{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  #gateFound .choice button{flex:1;min-width:160px;font-family:inherit;font-weight:800;font-size:15px;padding:13px;border-radius:22px;cursor:pointer;border:2px solid var(--wine)}
+  #gateFound .choice .update{background:var(--wine);color:#fff}
+  #gateFound .choice .newreq{background:#fff;color:var(--wine)}
+  #gate .purpose{margin:16px 0 4px;text-align:right}
+  #gate .purpose select{width:100%;border:1.5px solid var(--line-strong);border-radius:22px;padding:11px 16px;font-family:inherit;font-size:14.5px;background:var(--field-bg)}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <div class="head">
+    <div class="head-inner">
+      <div class="crest"><img src="data:image/png;base64,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" alt="شعار دولة فلسطين"></div>
+      <div class="side"><div class="state">سفارة دولة فلسطين</div><div class="sub">المملكة العربية السعودية</div></div>
+    </div>
+  </div>
+  <div class="title-wrap"><h1>استمارة تسجيل مواطن</h1></div>
+  <div class="notice">⚠ تنبيه: هذه البيانات سرية ويجب تعبئتها بشكل صحيح وبمعلومات دقيقة وكاملة.</div>
+
+  <!-- ===== بوابة الدخول: مقيم أو زائر ===== -->
+  <div id="gate">
+    <div class="gcard">
+      <p class="lead">للبدء، اختر نوع الإقامة:</p>
+      <div class="typechoice" id="typeChoice">
+        <button type="button" class="tcbtn" id="btnResident" onclick="pickType('resident')">مقيم<br><span>إقامة سعودية</span></button>
+        <button type="button" class="tcbtn" id="btnVisitor" onclick="pickType('visitor')">زائر<br><span>رقم حدود</span></button>
+      </div>
+
+      <!-- حقول تظهر بعد اختيار النوع -->
+      <div id="gateFields" style="display:none">
+        <div class="gfield" id="fResident" style="display:none">
+          <label>رقم الإقامة السعودية <span class="req">*</span> <span class="info" data-tip="رقم الإقامة السعودية المكوّن من 10 أرقام.">i</span></label>
+          <input id="gate_saudi" inputmode="numeric" maxlength="10" oninput="capDigits(this,10)" placeholder="10 أرقام">
+        </div>
+        <div class="gfield" id="fVisitor" style="display:none">
+          <label>رقم الحدود <span class="req">*</span></label>
+          <input id="gate_border" inputmode="numeric" oninput="capDigits(this,20)" placeholder="رقم الحدود">
+        </div>
+
+        <div class="gfield">
+          <label>هل تحمل هوية فلسطينية؟ <span class="req">*</span></label>
+          <div class="yesno">
+            <label class="yn"><input type="radio" name="hasPal" value="yes" onchange="togglePal()"> نعم</label>
+            <label class="yn"><input type="radio" name="hasPal" value="no" onchange="togglePal()"> لا</label>
+          </div>
+        </div>
+        <div class="gfield" id="fPal" style="display:none">
+          <label>رقم الهوية الفلسطينية <span class="req">*</span></label>
+          <input id="gate_pal" inputmode="numeric" maxlength="9" oninput="capDigits(this,9)" placeholder="9 أرقام">
+        </div>
+
+        <button class="gbtn" id="gateBtn" onclick="gateCheck()">متابعة</button>
+        <div class="gerr" id="gateErr"></div>
+      </div>
+
+      <!-- إذا كان مسجّلاً: اختيار الغرض + تحديث/طلب جديد -->
+      <div id="gateFound">
+        <div class="who">تم العثور على سجل باسم: <span id="foundName">—</span></div>
+        <div class="purpose">
+          <label style="font-weight:700;font-size:13.5px;display:block;margin-bottom:5px">سبب الحضور <span class="req">*</span></label>
+          <select id="gatePurpose">
+            <option value="" disabled selected>— اختر —</option>
+            <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
+            <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
+            <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
+            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option>لا يوجد</option><option value="أخرى">أخرى</option>
+          </select>
+        </div>
+        <div class="choice">
+          <button type="button" class="update" onclick="gateProceed('update')">تحديث البيانات</button>
+          <button type="button" class="newreq" onclick="gateProceed('new')">طلب جديد</button>
+        </div>
+        <div class="gerr" id="gateFoundErr" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
+  </div>
+
+
+  <form id="regForm" novalidate class="hidden">
+
+    <!-- Reason -->
+    <div class="section">
+      <div class="bar"><span class="num">★</span>سبب الزيارة</div>
+      <div class="grid">
+        <div class="field full">
+          <label>سبب الزيارة <span class="req">*</span> <span class="info" data-tip="اختر سبب مراجعتك للسفارة من القائمة.">i</span></label>
+          <select name="reason" id="reason" required>
+            <option value="" disabled selected>— اختر —</option>
+            <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
+            <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
+            <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
+            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option>لا يوجد</option><option value="أخرى">أخرى</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field full hidden" id="reasonOtherWrap">
+          <label>يُرجى تحديد السبب <span class="info" data-tip="اكتب سبب الزيارة إذا اخترت «أخرى».">i</span></label>
+          <input type="text" name="reason_other" placeholder="اكتب سبب الزيارة">
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal -->
+    <div class="section">
+      <div class="bar"><span class="num">1</span>البيانات الشخصية</div>
+      <div class="grid">
+        <div class="field">
+          <label>الاسم الأول <span class="req">*</span> <span class="info" data-tip="الاسم الأول بالحروف العربية (اسم واحد فقط).">i</span></label>
+          <input name="name1" id="name1" data-word required placeholder="الاسم الأول">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+        </div>
+        <div class="field">
+          <label>الاسم الثاني <span class="req">*</span> <span class="info" data-tip="الاسم الثاني (اسم الأب) بالحروف العربية.">i</span></label>
+          <input name="name2" id="name2" data-word required placeholder="الاسم الثاني">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+        </div>
+        <div class="field">
+          <label>الاسم الثالث <span class="req">*</span> <span class="info" data-tip="الاسم الثالث (اسم الجد) بالحروف العربية.">i</span></label>
+          <input name="name3" id="name3" data-word required placeholder="الاسم الثالث">
+          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+        </div>
+        <div class="field">
+          <label>الاسم الرابع (العائلة) <span class="req">*</span> <span class="info" data-tip="اسم العائلة بالحروف العربية (حتى 3 كلمات).">i</span></label>
+          <input name="name4" id="name4" data-word3 required placeholder="اسم العائلة">
+          <div class="err-msg">مطلوب — بالحروف العربية (حتى 3 كلمات)</div>
+        </div>
+        <input type="hidden" name="full_name" id="full_name">
+        <div class="field">
+          <label>اسم الأم <span class="req">*</span> <span class="info" data-tip="اسم الأم الأول فقط بالحروف العربية.">i</span></label>
+          <input name="mother_name" id="mother_name" data-ar required placeholder="اسم واحد فقط">
+          <div class="err-msg">يجب إدخال اسم واحد فقط بالحروف العربية</div>
+        </div>
+        <div class="field">
+          <label>رقم الهوية الفلسطينية <span class="info" data-tip="رقم الهوية الفلسطينية المكوّن من 9 أرقام (اختياري).">i</span></label>
+          <input name="palestinian_id" id="palestinian_id" inputmode="numeric" maxlength="9" oninput="capDigits(this,9)" placeholder="9 أرقام (اختياري)">
+          <div class="err-msg">إن تم إدخالها يجب أن تكون 9 أرقام</div>
+        </div>
+        <div class="field">
+          <label>رقم الإقامة السعودية <span class="req">*</span></label>
+          <input name="saudi_residency" id="saudi_residency" inputmode="numeric" maxlength="10" oninput="capDigits(this,10)" required placeholder="10 أرقام">
+          <div class="err-msg">مطلوب ويجب أن يتكوّن من 10 أرقام</div>
+        </div>
+        <div class="field">
+          <label>رقم الحدود <span class="info" data-tip="رقم بطاقة الحدود/الزيارة كما هو مدوّن في الوثيقة.">i</span></label>
+          <input name="border_no" id="border_no" inputmode="numeric" maxlength="20" oninput="capDigits(this,20)" placeholder="رقم الحدود (اختياري)">
+        </div>
+        <div class="field">
+          <label>تاريخ انتهاء الإقامة <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء الإقامة السعودية كما في البطاقة.">i</span></label>
+          <input type="date" name="residency_expiry" id="residency_expiry" required>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>مكان الميلاد <span class="req">*</span> <span class="info" data-tip="مدينة/بلد الميلاد بالحروف العربية.">i</span></label>
+          <input name="birth_place" id="birth_place" data-ar required>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>تاريخ الميلاد <span class="req">*</span> <span class="info" data-tip="تاريخ ميلادك حسب التقويم الميلادي.">i</span></label>
+          <input type="date" name="birth_date" id="birth_date" required>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>الجنس <span class="req">*</span> <span class="info" data-tip="اختر الجنس: ذكر أو أنثى.">i</span></label>
+          <select name="gender" id="gender" required>
+            <option value="" disabled selected>— اختر —</option>
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>الحالة الاجتماعية <span class="req">*</span> <span class="info" data-tip="اختر حالتك: أعزب/متزوج/مطلق/أرمل.">i</span></label>
+          <select name="marital_status" id="marital" required>
+            <option value="" disabled selected>— اختر —</option>
+            <option value="أعزب / عزباء">أعزب / عزباء</option>
+            <option value="متزوج / متزوجة">متزوج / متزوجة</option>
+            <option value="مطلق / مطلقة">مطلق / مطلقة</option>
+            <option value="أرمل / أرملة">أرمل / أرملة</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field"><label>المهنة <span class="req">*</span> <span class="info" data-tip="مهنتك الحالية بالحروف العربية.">i</span></label><input name="occupation" id="occupation" data-ar required><div class="err-msg">هذا الحقل مطلوب</div></div>
+        <div class="field">
+          <label>جهة العمل <span class="req">*</span> <span class="info" data-tip="اسم جهة عملك بالحروف العربية.">i</span></label>
+          <input name="employer" id="employer" data-ar required>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>رقم الجوال (+966 أو +970) <span class="req">*</span> <span class="info" data-tip="رقم الجوال مع رمز الدولة، يبدأ بـ +966 أو +970.">i</span></label>
+          <input name="mobile" id="mobile" inputmode="tel" required placeholder="+9665XXXXXXXX أو +970XXXXXXXXX">
+          <div class="err-msg">يجب أن يبدأ بـ +966 (السعودية) أو +970 (فلسطين)</div>
+        </div>
+        <div class="field">
+          <label>البريد الإلكتروني <span class="info" data-tip="بريد إلكتروني صحيح للتواصل (اختياري).">i</span></label>
+          <input type="email" name="email" id="email" placeholder="name@example.com">
+          <div class="err-msg">صيغة بريد غير صحيحة</div>
+        </div>
+        <div class="field">
+          <label>المنطقة في السعودية <span class="req">*</span> <span class="info" data-tip="اختر منطقة سكنك داخل السعودية.">i</span></label>
+          <select name="region" id="region" required>
+            <option value="" disabled selected>— اختر —</option>
+            <option>منطقة الرياض</option><option>منطقة مكة المكرمة</option><option>منطقة المدينة المنورة</option>
+            <option>المنطقة الشرقية</option><option>منطقة القصيم</option><option>منطقة عسير</option>
+            <option>منطقة تبوك</option><option>منطقة حائل</option><option>منطقة الحدود الشمالية</option>
+            <option>منطقة جازان</option><option>منطقة نجران</option><option>منطقة الباحة</option><option>منطقة الجوف</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>الحي / المدينة <span class="req">*</span> <span class="info" data-tip="اسم الحي أو المدينة بالحروف العربية.">i</span></label>
+          <input name="district" id="district" data-ar required placeholder="اكتب الحي أو المدينة">
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Travel -->
+    <div class="section">
+      <div class="bar"><span class="num">2</span>وثائق السفر</div>
+      <div class="grid">
+        <!-- Q1: هل تملك جواز سفر فلسطيني؟ -->
+        <div class="field full">
+          <label>هل تملك جواز سفر فلسطيني؟ <span class="req">*</span> <span class="info" data-tip="يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل.">i</span></label>
+          <div class="yesno">
+            <label class="yn"><input type="radio" name="hasPassport" value="yes" onchange="toggleTravelDocs()"> نعم</label>
+            <label class="yn"><input type="radio" name="hasPassport" value="no" onchange="toggleTravelDocs()"> لا</label>
+          </div>
+          <div class="err-msg" id="hasPassportErr">هذا الحقل مطلوب</div>
+        </div>
+
+        <!-- Passport fields (shown if hasPassport = yes) -->
+        <div class="field hidden" data-passgrp="1">
+          <label>رقم جواز السفر الفلسطيني <span class="req">*</span> <span class="info" data-tip="رقم جواز السفر الفلسطيني (أرقام فقط).">i</span></label>
+          <input name="passport_no" id="passport_no" inputmode="numeric" placeholder="أرقام فقط">
+          <div class="err-msg">مطلوب — أرقام فقط</div>
+        </div>
+        <div class="field hidden" data-passgrp="1"><label>تاريخ انتهاء الجواز <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء جواز السفر.">i</span></label><input type="date" name="passport_expiry" id="passport_expiry"><div class="err-msg">هذا الحقل مطلوب</div></div>
+
+        <!-- Q2: هل تملك وثيقة سفر؟ (always shown) -->
+        <div class="field full" id="wathiqaQwrap">
+          <label>هل تملك وثيقة سفر؟ <span class="req">*</span> <span class="info" data-tip="أجب عن السؤالين؛ يجب أن تملك جوازاً أو وثيقة سفر على الأقل.">i</span></label>
+          <div class="yesno">
+            <label class="yn"><input type="radio" name="hasWathiqa" value="yes" onchange="toggleTravelDocs()"> نعم</label>
+            <label class="yn"><input type="radio" name="hasWathiqa" value="no" onchange="toggleTravelDocs()"> لا</label>
+          </div>
+          <div class="err-msg" id="hasWathiqaErr">هذا الحقل مطلوب</div>
+        </div>
+
+        <!-- Wathiqa fields (shown if hasWathiqa = yes) -->
+        <div class="field hidden" data-docgrp="1">
+          <label>نوع وثيقة السفر <span class="req">*</span> <span class="info" data-tip="اختر نوع وثيقة السفر.">i</span></label>
+          <select name="travel_doc_type" id="travel_doc_type">
+            <option value="" selected>— اختر —</option>
+            <option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field hidden" id="docOtherWrap">
+          <label>حدد نوع الوثيقة <span class="req">*</span> <span class="info" data-tip="اكتب نوع الوثيقة إذا اخترت «أخرى».">i</span></label>
+          <input name="travel_doc_type_other" placeholder="اكتب نوع الوثيقة">
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field hidden" data-docgrp="1"><label>رقم وثيقة السفر <span class="req">*</span> <span class="info" data-tip="رقم وثيقة السفر.">i</span></label><input name="travel_doc_no" id="travel_doc_no"><div class="err-msg">هذا الحقل مطلوب</div></div>
+        <div class="field hidden" data-docgrp="1"><label>تاريخ انتهاء الوثيقة <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء وثيقة السفر.">i</span></label><input type="date" name="travel_doc_expiry" id="travel_doc_expiry"><div class="err-msg">هذا الحقل مطلوب</div></div>
+      </div>
+    </div>
+
+    <div class="actions"><button type="submit" class="submit" id="submitBtn">إرسال الاستمارة</button></div>
+    <div class="status" id="status"></div>
+    <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
+  </form>
+</div>
+
+<script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxw7v2kiz2MYz6fLYJM5GuYQOhKQydzFT4va_1EvKIlR_-AGyLnQ_ESN9sJB_Vz6c61Wg/exec";
+  // النقر على أيقونة المعلومات يُظهر التلميح على الجوال (لا يوجد تمرير باللمس)
+  document.addEventListener('click',function(e){
+    var icon=e.target.closest && e.target.closest('.info');
+    document.querySelectorAll('.info.show').forEach(function(el){ if(el!==icon) el.classList.remove('show'); });
+    if(icon){ e.preventDefault(); e.stopPropagation(); icon.classList.toggle('show'); }
+  });
+  // يمنع إدخال غير الأرقام ويحدّ العدد الأقصى
+  function capDigits(el,max){var v=(el.value||'').replace(/[^0-9]/g,'');if(v.length>max)v=v.slice(0,max);el.value=v;}
+  // يسمح بالحروف العربية والمسافات فقط (للأسماء والحقول النصية)
+  function arabicOnly(el){el.value=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F\s]/g,'');}
+  // اسم واحد فقط: حروف عربية بدون مسافات أو أرقام
+  function arabicWord(el){el.value=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F]/g,'');}
+  function arabicWordOK(v){v=(v||'').trim();return v!==''&&/^[\u0600-\u06FF\u0750-\u077F]+$/.test(v);}
+  // اسم العائلة: حروف عربية ومسافات، بحد أقصى 3 كلمات
+  function arabicWords3(el){
+    var v=(el.value||'').replace(/[^\u0600-\u06FF\u0750-\u077F\s]/g,'').replace(/\s{2,}/g,' ');
+    var parts=v.split(' ').filter(Boolean);
+    if(parts.length>3){ v=parts.slice(0,3).join(' ')+(v.endsWith(' ')?'':''); }
+    el.value=v;
+  }
+  function arabicWords3OK(v){
+    v=(v||'').trim(); if(v==='')return false;
+    if(!/^[\u0600-\u06FF\u0750-\u077F\s]+$/.test(v))return false;
+    return v.split(/\s+/).filter(Boolean).length<=3;
+  }
+  // يطبّق فلتر العربية على كل الحقول التي تحمل data-ar
+  function wireArabic(root){(root||document).querySelectorAll('[data-ar]').forEach(function(el){
+    if(el.__arWired)return; el.__arWired=true;
+    el.addEventListener('input',function(){arabicOnly(el);});
+  });
+  (root||document).querySelectorAll('[data-word]').forEach(function(el){
+    if(el.__wWired)return; el.__wWired=true;
+    el.addEventListener('input',function(){arabicWord(el);});
+  });
+  (root||document).querySelectorAll('[data-word3]').forEach(function(el){
+    if(el.__w3Wired)return; el.__w3Wired=true;
+    el.addEventListener('input',function(){arabicWords3(el);});
+  });}
+  // خريطة تلميحات حسب نص العنوان (للأقسام المُولّدة: الزوجات/الأبناء)
+  var TIP_MAP={
+    'اسم الزوجة الرباعي':'الاسم الرباعي للزوجة بالحروف العربية.',
+    'اسم والدة الزوجة':'اسم والدة الزوجة الأول فقط بالحروف العربية.',
+    'الجنسية':'اختر جنسية الزوجة من القائمة.',
+    'مكان الميلاد':'مدينة/بلد الميلاد بالحروف العربية.',
+    'تاريخ الميلاد':'تاريخ الميلاد حسب التقويم الميلادي.',
+    'رقم الهوية الفلسطينية':'رقم الهوية الفلسطينية المكوّن من 9 أرقام.',
+    'رقم الهوية الوطنية السعودية':'رقم الهوية الوطنية السعودية المكوّن من 10 أرقام.',
+    'رقم الإقامة السعودية':'رقم الإقامة السعودية المكوّن من 10 أرقام (اختياري).',
+    'تاريخ انتهاء الإقامة':'تاريخ انتهاء الإقامة السعودية.',
+    'رقم جواز السفر الفلسطيني':'رقم جواز السفر الفلسطيني (أرقام فقط).',
+    'تاريخ انتهاء الجواز':'تاريخ انتهاء جواز السفر.',
+    'نوع وثيقة السفر':'نوع وثيقة السفر إن لم يوجد جواز فلسطيني.',
+    'حدد نوع الوثيقة':'اكتب نوع الوثيقة إذا اخترت «أخرى».',
+    'رقم وثيقة السفر':'رقم وثيقة السفر.'
+  };
+  function wireTips(root){(root||document).querySelectorAll('.field label').forEach(function(lb){
+    if(lb.querySelector('.info'))return; // موجود مسبقاً
+    // نص العنوان بدون النجمة والرموز
+    var txt=lb.textContent.replace(/[*i]/g,'').trim();
+    var hint=TIP_MAP[txt];
+    if(hint){
+      var sp=document.createElement('span'); sp.className='info'; sp.setAttribute('data-tip',hint); sp.textContent='i';
+      lb.appendChild(document.createTextNode(' ')); lb.appendChild(sp);
+    }
+  });}
+
+  // ================= ID-first gate =================
+  var __prefill = null; // record to prefill when updating
+  function _jsonp(params){
+    return new Promise(function(resolve,reject){
+      var cb='cb_'+Math.random().toString(36).slice(2);
+      window[cb]=function(d){resolve(d);cleanup();};
+      var s=document.createElement('script');
+      var q=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
+      s.src=WEB_APP_URL+'?'+q+'&callback='+cb;
+      s.onerror=function(){reject(new Error('network'));cleanup();};
+      function cleanup(){delete window[cb];s.remove();}
+      document.body.appendChild(s);
+      setTimeout(function(){if(window[cb]){reject(new Error('timeout'));cleanup();}},15000);
+    });
+  }
+  function gDigits(v,n){return new RegExp('^[0-9]{'+n+'}$').test((v||'').trim());}
+
+  var __gateType = null; // 'resident' | 'visitor'
+  function pickType(t){
+    __gateType=t;
+    document.getElementById('btnResident').classList.toggle('active',t==='resident');
+    document.getElementById('btnVisitor').classList.toggle('active',t==='visitor');
+    document.getElementById('gateFields').style.display='block';
+    document.getElementById('fResident').style.display = t==='resident'?'block':'none';
+    document.getElementById('fVisitor').style.display  = t==='visitor'?'block':'none';
+    // clear the non-chosen id
+    if(t==='resident'){var b=document.getElementById('gate_border'); if(b)b.value='';}
+    else{var s=document.getElementById('gate_saudi'); if(s)s.value='';}
+    document.getElementById('gateErr').textContent='';
+  }
+  function togglePal(){
+    var yes=document.querySelector('input[name="hasPal"]:checked');
+    var show = yes && yes.value==='yes';
+    document.getElementById('fPal').style.display = show?'block':'none';
+    if(!show){var p=document.getElementById('gate_pal'); if(p)p.value='';}
+  }
+
+  async function gateCheck(){
+    var err=document.getElementById('gateErr');
+    var gBtn=document.getElementById('gateBtn');
+    err.textContent='';
+    if(!__gateType){err.textContent='اختر نوع الإقامة: مقيم أو زائر';return;}
+    var sid=document.getElementById('gate_saudi').value.trim();
+    var bnum=document.getElementById('gate_border').value.trim();
+    var pal=document.getElementById('gate_pal').value.trim();
+    var hasPalSel=document.querySelector('input[name="hasPal"]:checked');
+
+    if(__gateType==='resident'){
+      if(!gDigits(sid,10)){err.textContent='رقم الإقامة السعودية مطلوب ويجب أن يكون 10 أرقام';return;}
+    }else{
+      if(!bnum){err.textContent='رقم الحدود مطلوب';return;}
+    }
+    if(!hasPalSel){err.textContent='يرجى تحديد: هل تحمل هوية فلسطينية؟';return;}
+    if(hasPalSel.value==='yes' && !gDigits(pal,9)){err.textContent='رقم الهوية الفلسطينية مطلوب ويجب أن يكون 9 أرقام';return;}
+
+    var seed={__type:__gateType};
+    if(__gateType==='resident' && sid)seed.saudi_residency=sid;
+    if(__gateType==='visitor'  && bnum)seed.border_no=bnum;
+    if(hasPalSel.value==='yes' && pal)seed.palestinian_id=pal;
+
+    gBtn.disabled=true; gBtn.textContent='جارٍ التحقق…';
+    try{
+      var d=await _jsonp({action:'lookup',saudi_residency:sid,palestinian_id:pal,border_no:bnum});
+      if(d && d.found){
+        __prefill=d.record||{};
+        document.getElementById('foundName').textContent=__prefill.full_name||'—';
+        document.getElementById('gateFound').style.display='block';
+        document.getElementById('gateFound').scrollIntoView({behavior:'smooth',block:'center'});
+      }else{
+        openForm(false,seed);
+      }
+    }catch(e){
+      err.textContent='تعذّر التحقق من الخادم — يمكنك المتابعة بتعبئة الاستمارة.';
+      openForm(false,seed);
+    }finally{
+      gBtn.disabled=false; gBtn.textContent='متابعة';
+    }
+  }
+
+  function gateProceed(mode){
+    var err=document.getElementById('gateFoundErr');
+    var purposeEl=document.getElementById('gatePurpose');
+    var purpose=purposeEl.value;
+    err.textContent='';
+    purposeEl.style.borderColor='';
+    if(!purpose){
+      err.textContent='يرجى اختيار سبب الحضور أولاً';
+      purposeEl.style.borderColor='var(--wine)';
+      purposeEl.scrollIntoView({behavior:'smooth',block:'center'});
+      purposeEl.focus();
+      return;
+    }
+    if(mode==='update'){
+      openForm(true,__prefill||{});
+    }else{
+      var seed={__type:__gateType};
+      var sid=document.getElementById('gate_saudi').value.trim();
+      var pal=document.getElementById('gate_pal').value.trim();
+      var bnum=document.getElementById('gate_border').value.trim();
+      if(sid)seed.saudi_residency=sid;
+      if(pal)seed.palestinian_id=pal;
+      if(bnum)seed.border_no=bnum;
+      openForm(false,seed);
+    }
+    var r=document.getElementById('reason'); if(r){r.value=purpose; r.dispatchEvent(new Event('change'));}
+  }
+
+  function openForm(isUpdate, seed){
+    document.getElementById('gate').style.display='none';
+    var f=document.getElementById('regForm'); f.classList.remove('hidden');
+    // visitor: Saudi Iqama is NOT required (they have no Iqama); border number stands instead
+    var isVisitor = seed && seed.__type==='visitor';
+    var sres=document.getElementById('saudi_residency');
+    var sresField=sres?sres.closest('.field'):null;
+    var sresStar=sresField?sresField.querySelector('label .req'):null;
+    if(isVisitor && sres){
+      sres.required=false; sres.removeAttribute('required');
+      sres.dataset.optional='1';
+      if(sresStar)sresStar.style.display='none';
+      sres.placeholder='10 أرقام (غير مطلوب للزائر)';
+      var rexpEl=document.getElementById('residency_expiry');
+      if(rexpEl){rexpEl.required=false; var rs=rexpEl.closest('.field').querySelector('label .req'); if(rs)rs.style.display='none';}
+    }else if(sres){
+      sres.required=true; sres.dataset.optional='';
+      if(sresStar)sresStar.style.display='';
+      var rexpEl2=document.getElementById('residency_expiry');
+      if(rexpEl2){rexpEl2.required=true; var rs2=rexpEl2.closest('.field').querySelector('label .req'); if(rs2)rs2.style.display='';}
+    }
+    // prefill simple named fields from seed/record
+    if(seed){
+      Object.keys(seed).forEach(function(k){
+        if(k==='__type')return;
+        var el=f.querySelector('[name="'+k+'"]');
+        if(el && seed[k]!=null && seed[k]!=='' && el.tagName!=='SELECT'){ el.value=seed[k]; }
+        else if(el && el.tagName==='SELECT' && seed[k]){ el.value=seed[k]; }
+      });
+      // trigger dependent UI (marital -> wives/children, pal id -> passport req)
+      ['marital_status','palestinian_id','reason','travel_doc_type'].forEach(function(nm){
+        var el=f.querySelector('[name="'+nm+'"]')||document.getElementById(nm);
+        if(el) el.dispatchEvent(new Event(el.tagName==='SELECT'?'change':'input'));
+      });
+      // split stored full_name into the 4 applicant name fields
+      if(seed.full_name)splitName(seed.full_name,['name1','name2','name3','name4']);
+      // restore passport/wathiqa answers ONLY when updating an existing record
+      if(isUpdate)(function(){
+        var hasP=(seed.passport_no&&String(seed.passport_no).trim()!=='');
+        var hasW=(seed.travel_doc_type&&String(seed.travel_doc_type).trim()!=='');
+        // only set an answer when we actually know it; leave unanswered otherwise
+        if(hasP){var pYes=document.querySelector('input[name="hasPassport"][value="yes"]');if(pYes)pYes.checked=true;}
+        else{var pNo=document.querySelector('input[name="hasPassport"][value="no"]');if(pNo)pNo.checked=true;}
+        if(hasW){var wYes=document.querySelector('input[name="hasWathiqa"][value="yes"]');if(wYes)wYes.checked=true;}
+        else{var wNo=document.querySelector('input[name="hasWathiqa"][value="no"]');if(wNo)wNo.checked=true;}
+        toggleTravelDocs();
+        if(hasP){var pno=document.getElementById('passport_no');if(pno)pno.value=seed.passport_no||'';var pex=document.getElementById('passport_expiry');if(pex&&seed.passport_expiry)pex.value=seed.passport_expiry;}
+        if(hasW){var dt=document.getElementById('travel_doc_type');if(dt)dt.value=seed.travel_doc_type||'';toggleTravelDocs();
+          var dn=document.getElementById('travel_doc_no');if(dn)dn.value=seed.travel_doc_no||'';
+          var de=document.getElementById('travel_doc_expiry');if(de&&seed.travel_doc_expiry)de.value=seed.travel_doc_expiry;
+          if(seed.travel_doc_type_other){var o=document.querySelector('[name="travel_doc_type_other"]');if(o)o.value=seed.travel_doc_type_other;}}
+      })();
+      // if updating, also rebuild wives/children then fill them
+      if(isUpdate){ prefillFamily(seed); }
+    }
+    f.scrollIntoView({behavior:'smooth',block:'start'});
+    // banner to show mode
+    showModeBanner(isUpdate);
+  }
+
+  function prefillFamily(rec){
+    var wc=parseInt(rec.wives_count)||0, cc=parseInt(rec.children_count)||0;
+    var wCount=document.getElementById('wivesCount'), cCount=document.getElementById('childrenCount');
+    if(wc>0 && wCount){ wCount.value=String(wc); wCount.dispatchEvent(new Event('change')); }
+    if(cc>0 && cCount){ cCount.value=String(cc); cCount.dispatchEvent(new Event('change')); }
+    // after render, fill their fields
+    setTimeout(function(){
+      Object.keys(rec).forEach(function(k){
+        var el=document.querySelector('[name="'+k+'"]');
+        if(el && rec[k]!=null && rec[k]!==''){ el.value=rec[k]; if(el.tagName==='SELECT') el.value=rec[k]; }
+      });
+      // split wife/child stored names into 4 parts each
+      for(var w=1;w<=wc;w++){
+        if(rec['wife'+w+'_name'])splitName(rec['wife'+w+'_name'],[
+          document.querySelector('[name="wife'+w+'_n1"]'),document.querySelector('[name="wife'+w+'_n2"]'),
+          document.querySelector('[name="wife'+w+'_n3"]'),document.querySelector('[name="wife'+w+'_n4"]')]);
+      }
+      for(var c=1;c<=cc;c++){
+        if(rec['child'+c+'_name'])splitName(rec['child'+c+'_name'],[
+          document.querySelector('[name="child'+c+'_n1"]'),document.querySelector('[name="child'+c+'_n2"]'),
+          document.querySelector('[name="child'+c+'_n3"]'),document.querySelector('[name="child'+c+'_n4"]')]);
+      }
+    },140);
+  }
+
+  function showModeBanner(isUpdate){
+    var n=document.querySelector('.notice');
+    if(!n) return;
+    n.textContent = isUpdate
+      ? '✎ وضع التحديث: تم تحميل بياناتك السابقة — عدّل ما يلزم ثم أرسل.'
+      : '⚠ تنبيه: هذه البيانات سرية ويجب تعبئتها بشكل صحيح وبمعلومات دقيقة وكاملة.';
+  }
+
+  const NAT_OPTIONS = `<option>فلسطينية</option><option>سعودية</option><option>أردنية</option><option>لبنانية</option><option>سورية</option><option>مصرية</option><option>عراقية</option><option>يمنية</option><option>كويتية</option><option>إماراتية</option><option>قطرية</option><option>بحرينية</option><option>عُمانية</option><option>سودانية</option><option>ليبية</option><option>تونسية</option><option>جزائرية</option><option>مغربية</option><option>موريتانية</option><option>صومالية</option><option>جيبوتية</option><option>جزر القمر</option><option>نيجيرية</option><option>إثيوبية</option><option>كينية</option><option>غانية</option><option>سنغالية</option><option>إيفوارية</option><option>كاميرونية</option><option>أوغندية</option><option>تنزانية</option><option>زامبية</option><option>زيمبابوية</option><option>أنغولية</option><option>موزمبيقية</option><option>جنوب أفريقية</option><option>مالية</option><option>نيجرية</option><option>تشادية</option><option>إريترية</option><option>رواندية</option><option>بوروندية</option><option>ليبيرية</option><option>سيراليونية</option><option>توغولية</option><option>بنينية</option><option>غينية</option><option>غابونية</option><option>كونغولية</option><option>مدغشقرية</option><option>مالاوية</option><option>بوتسوانية</option><option>ناميبية</option><option>تركية</option><option>إيرانية</option><option>أفغانية</option><option>باكستانية</option><option>أذربيجانية</option><option>أرمينية</option><option>جورجية</option><option>كازاخستانية</option><option>أوزبكية</option><option>تركمانية</option><option>طاجيكية</option><option>قرغيزية</option><option>هندية</option><option>بنغلاديشية</option><option>سريلانكية</option><option>نيبالية</option><option>بوتانية</option><option>مالديفية</option><option>إندونيسية</option><option>ماليزية</option><option>فلبينية</option><option>تايلاندية</option><option>فيتنامية</option><option>سنغافورية</option><option>ميانمارية</option><option>كمبودية</option><option>لاوسية</option><option>بروناوية</option><option>تيمورية</option><option>صينية</option><option>يابانية</option><option>كورية جنوبية</option><option>كورية شمالية</option><option>منغولية</option><option>تايوانية</option><option>هونغ كونغية</option><option>بريطانية</option><option>إيرلندية</option><option>فرنسية</option><option>ألمانية</option><option>إيطالية</option><option>إسبانية</option><option>برتغالية</option><option>هولندية</option><option>بلجيكية</option><option>سويسرية</option><option>نمساوية</option><option>سويدية</option><option>نرويجية</option><option>دنماركية</option><option>فنلندية</option><option>آيسلندية</option><option>يونانية</option><option>بولندية</option><option>تشيكية</option><option>سلوفاكية</option><option>مجرية</option><option>رومانية</option><option>بلغارية</option><option>أوكرانية</option><option>روسية</option><option>بيلاروسية</option><option>صربية</option><option>كرواتية</option><option>سلوفينية</option><option>بوسنية</option><option>ألبانية</option><option>مقدونية</option><option>مالطية</option><option>قبرصية</option><option>لوكسمبورغية</option><option>ليتوانية</option><option>لاتفية</option><option>إستونية</option><option>أمريكية</option><option>كندية</option><option>مكسيكية</option><option>برازيلية</option><option>أرجنتينية</option><option>تشيلية</option><option>كولومبية</option><option>فنزويلية</option><option>بيروفية</option><option>إكوادورية</option><option>بوليفية</option><option>باراغوانية</option><option>أوروغوانية</option><option>كوبية</option><option>دومينيكية</option><option>هايتية</option><option>جامايكية</option><option>بنمية</option><option>كوستاريكية</option><option>غواتيمالية</option><option>هندوراسية</option><option>سلفادورية</option><option>نيكاراغوية</option><option>أسترالية</option><option>نيوزيلندية</option><option>فيجية</option><option>بابوا غينيا الجديدة</option><option>أخرى</option>`;
+  const DOC_OPTIONS = `<option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>`;
+
+  // ===== validators =====
+  function fourArabicOK(v){v=(v||'').trim();if(!v)return false;var p=v.split(/\s+/).filter(Boolean);if(p.length!==4)return false;return /^[\u0600-\u06FF\u0750-\u077F\s]+$/.test(v);}
+  function oneNameOK(v){v=(v||'').trim();if(!v)return false;var p=v.split(/\s+/).filter(Boolean);if(p.length!==1)return false;return /^[\u0600-\u06FF\u0750-\u077F]+$/.test(v);}
+  function digitsN(v,n){return new RegExp('^[0-9]{'+n+'}$').test((v||'').trim());}
+  function digitsOnly(v){return /^[0-9]+$/.test((v||'').trim());}
+  function phoneOK(v){v=(v||'').replace(/[\s-]/g,'');return /^\+?966[0-9]{9}$/.test(v)||/^\+?970[0-9]{8,9}$/.test(v);}
+  function emailOK(v){return v===''||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+  function setInvalid(el,bad){var f=el.closest('.field');if(f)f.classList.toggle('invalid',bad);}
+  // vtype rules used across sections:
+  // name=4 arabic | id9opt=optional but 9 if filled | res10=required 10 | date/req=required non-empty
+  // passIfID = digits, required only if that block's palestinian id is filled
+  function ruleOK(v,vtype){
+    v=(v||'').trim();
+    if(vtype==='name')return fourArabicOK(v);
+    if(vtype==='word')return arabicWordOK(v);
+    if(vtype==='word3')return arabicWords3OK(v);
+    if(vtype==='mother1')return oneNameOK(v);
+    if(vtype==='id9opt')return v===''||digitsN(v,9);
+    if(vtype==='res10')return digitsN(v,10);
+    if(vtype==='res10opt')return v===''||digitsN(v,10);
+    if(vtype==='sid10')return digitsN(v,10);
+    if(vtype==='req')return v!=='';
+    if(vtype==='optdigits')return v===''||digitsOnly(v);
+    return true; // 'opt' truly optional / free
+  }
+
+  // ===== reason other =====
+  var reason=document.getElementById('reason'),reasonOtherWrap=document.getElementById('reasonOtherWrap');
+  reason.addEventListener('change',()=>reasonOtherWrap.classList.toggle('hidden',reason.value!=='أخرى'));
+
+  // ===== travel doc other =====
+  var docSel=document.getElementById('travel_doc_type'),docOtherWrap=document.getElementById('docOtherWrap');
+  docSel.addEventListener('change',()=>{toggleTravelDocs();});
+
+  // ===== وثائق السفر: جواز -> وإلا وثيقة (واحدة على الأقل) =====
+  var pid=document.getElementById('palestinian_id');
+  function toggleTravelDocs(){
+    var hasPass=document.querySelector('input[name="hasPassport"]:checked');
+    var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
+    var passYes = hasPass && hasPass.value==='yes';
+    // passport fields shown only if passport = yes
+    document.querySelectorAll('[data-passgrp]').forEach(function(el){
+      el.classList.toggle('hidden',!passYes);
+      if(!passYes){var inp=el.querySelector('input'); if(inp)inp.value='';}
+    });
+    // wathiqa question ALWAYS visible now
+    document.getElementById('wathiqaQwrap').classList.remove('hidden');
+    var wathYes = hasWath && hasWath.value==='yes';
+    document.querySelectorAll('[data-docgrp]').forEach(function(el){
+      el.classList.toggle('hidden',!wathYes);
+      if(!wathYes){var inp=el.querySelector('input,select'); if(inp)inp.value='';}
+    });
+    // doc-other only if wathiqa=yes and type=أخرى
+    var showOther = wathYes && docSel.value==='أخرى';
+    docOtherWrap.classList.toggle('hidden',!showOther);
+    if(!showOther){var o=docOtherWrap.querySelector('input'); if(o&&!wathYes)o.value='';}
+  }
+  window.toggleTravelDocs=toggleTravelDocs;
+
+  // ===== marital status (wife/children sections removed from form) =====
+  var marital=document.getElementById('marital'),
+      wivesSection=document.getElementById('wivesSection'),wivesCount=document.getElementById('wivesCount'),
+      wivesContainer=document.getElementById('wivesContainer'),
+      childrenSection=document.getElementById('childrenSection'),childrenCount=document.getElementById('childrenCount');
+  function isMarried(){return marital.value==='متزوج / متزوجة';}
+  // family sections no longer exist; marital status is collected without family detail
+
+  // ===== wife block = same ID/travel block as applicant =====
+  function wifeBlock(i){
+    var P='wife'+i+'_';
+    var card=document.createElement('div');card.className='wifecard';
+    card.innerHTML='<div class="wt">الزوجة رقم '+i+'</div><div class="grid">'+
+      nameFields(P,'اسم الزوجة')+
+      fld(P+'mother_name','اسم والدة الزوجة',true,'mother1','اسم واحد فقط بالعربية','')+
+      '<div class="field"><label>الجنسية <span class="req">*</span></label>'+
+        '<select name="'+P+'nationality" data-vtype="req"><option value="" disabled selected>— اختر —</option>'+NAT_OPTIONS+'</select>'+
+        '<div class="err-msg">هذا الحقل مطلوب</div></div>'+
+      fld(P+'birth_place','مكان الميلاد',true,'req','هذا الحقل مطلوب','')+
+      fldDate(P+'birth_date','تاريخ الميلاد',true)+
+      '<div class="field" data-palonly="'+i+'"><label>رقم الهوية الفلسطينية</label>'+
+        '<input name="'+P+'palestinian_id" data-vtype="id9opt" maxlength="9" oninput="capDigits(this,9)" placeholder="9 أرقام (اختياري)">'+
+        '<div class="err-msg">إن أُدخلت يجب أن تكون 9 أرقام</div></div>'+
+      '<div class="field" data-saudionly="'+i+'" style="display:none"><label>رقم الهوية الوطنية السعودية <span class="req">*</span></label>'+
+        '<input name="'+P+'saudi_id" data-vtype="sid10" maxlength="10" placeholder="10 أرقام">'+
+        '<div class="err-msg">مطلوب ويجب أن يكون 10 أرقام</div></div>'+
+      '<div class="field"><label>رقم الإقامة السعودية</label>'+
+        '<input name="'+P+'saudi_residency" data-vtype="res10opt" maxlength="10" oninput="capDigits(this,10)" placeholder="10 أرقام (اختياري)">'+
+        '<div class="err-msg">إن أُدخل يجب أن يكون 10 أرقام</div></div>'+
+      fldDate(P+'residency_expiry','تاريخ انتهاء الإقامة',false)+
+      '<div class="field" data-palonly="'+i+'"><label>رقم جواز السفر الفلسطيني <span class="req" id="wpass'+i+'req" style="display:none">*</span></label>'+
+        '<input name="'+P+'passport_no" id="wpass'+i+'" data-vtype="optdigits" placeholder="أرقام فقط">'+
+        '<div class="err-msg">أرقام فقط</div></div>'+
+      fldDate(P+'passport_expiry','تاريخ انتهاء الجواز',false)+
+      '<div class="field"><label>نوع وثيقة السفر</label>'+
+        '<select name="'+P+'doc_type" data-doc="'+i+'"><option value="" selected>— اختر —</option>'+DOC_OPTIONS+'</select></div>'+
+      '<div class="field hidden" data-docother="'+i+'"><label>حدد نوع الوثيقة</label><input name="'+P+'doc_type_other"></div>'+
+      fld(P+'doc_no','رقم وثيقة السفر',false,'opt','','')+
+      '</div>';
+    return card;
+  }
+  // يبني 4 حقول اسم منفصلة + حقل مخفي يجمعها
+  function nameFields(P, lbl){
+    function one(n,label,ph,three){
+      return '<div class="field"><label>'+label+' <span class="req">*</span></label>'+
+        '<input name="'+P+n+'" '+(three?'data-word3 data-vtype="word3"':'data-word data-vtype="word"')+' placeholder="'+ph+'">'+
+        '<div class="err-msg">'+(three?'بالحروف العربية (حتى 3 كلمات)':'اسم واحد بالحروف العربية فقط')+'</div></div>';
+    }
+    return one('n1',lbl+' — الأول','الأول')+one('n2',lbl+' — الثاني','الثاني')+
+           one('n3',lbl+' — الثالث','الثالث')+one('n4',lbl+' — الرابع (العائلة)','العائلة',true)+
+           '<input type="hidden" name="'+P+'name">';
+  }
+  function fld(name,label,req,vtype,msg,ph,extraId){
+    var isText=(vtype==='name'||vtype==='mother1'||vtype==='req');
+    return '<div class="field"><label>'+label+(req?' <span class="req">*</span>':'')+
+      (extraId?' <span class="req" id="'+extraId+'req" style="display:none">*</span>':'')+'</label>'+
+      '<input name="'+name+'"'+(extraId?' id="'+extraId+'"':'')+(isText?' data-ar':'')+' data-vtype="'+vtype+'"'+(ph?' placeholder="'+ph+'"':'')+'>'+
+      '<div class="err-msg">'+(msg||'هذا الحقل مطلوب')+'</div></div>';
+  }
+  function fldDate(name,label,req){
+    return '<div class="field"><label>'+label+(req?' <span class="req">*</span>':'')+'</label>'+
+      '<input type="date" name="'+name+'" data-vtype="'+(req?'req':'opt')+'">'+
+      '<div class="err-msg">هذا الحقل مطلوب</div></div>';
+  }
+  function renderWives(n){
+    if(!wivesContainer)return;
+    wivesContainer.innerHTML='';
+    for(var i=1;i<=n;i++)wivesContainer.appendChild(wifeBlock(i));
+    // wire per-wife: pal id -> passport required, doc other, nationality -> pal fields
+    for(var i=1;i<=n;i++)(function(i){
+      var P='wife'+i+'_';
+      var wid=wivesContainer.querySelector('[name="'+P+'palestinian_id"]');
+      var wpr=document.getElementById('wpass'+i+'req');
+      if(wid&&wpr)wid.addEventListener('input',()=>{wpr.style.display=wid.value.trim()?'inline':'none';});
+      var ds=wivesContainer.querySelector('[data-doc="'+i+'"]');
+      var dow=wivesContainer.querySelector('[data-docother="'+i+'"]');
+      if(ds&&dow)ds.addEventListener('change',()=>dow.classList.toggle('hidden',ds.value!=='أخرى'));
+      // nationality -> Palestinian fields (فلسطينية) or Saudi ID (سعودية)
+      var nat=wivesContainer.querySelector('[name="'+P+'nationality"]');
+      var palFields=wivesContainer.querySelectorAll('[data-palonly="'+i+'"]');
+      var saudiField=wivesContainer.querySelector('[data-saudionly="'+i+'"]');
+      var saudiIdInput=wivesContainer.querySelector('[name="'+P+'saudi_id"]');
+      if(saudiIdInput)saudiIdInput.addEventListener('input',function(){capDigits(saudiIdInput,10);});
+      function syncNat(){
+        var val = nat? nat.value : '';
+        var isPal = val==='فلسطينية';
+        var isSaudi = val==='سعودية';
+        palFields.forEach(function(el){
+          el.classList.toggle('hidden',!isPal);
+          if(!isPal){ var inp=el.querySelector('input'); if(inp)inp.value=''; }
+        });
+        if(saudiField){
+          saudiField.style.display = isSaudi?'flex':'none';
+          if(!isSaudi && saudiIdInput)saudiIdInput.value='';
+        }
+      }
+      if(nat)nat.addEventListener('change',syncNat);
+      syncNat(); // default: hidden until nationality chosen
+    })(i);
+    wireArabic(wivesContainer); wireTips(wivesContainer);
+  }
+  if(wivesCount)wivesCount.addEventListener('change',()=>{
+    var n=parseInt(wivesCount.value)||0;
+    if(isMarried()&&n===0){n=1;wivesCount.value='1';} // married must have >=1
+    renderWives(n);
+  });
+
+  // ===== children table: id9 optional, res10 required, passport optional digits =====
+  var CHILD_DOC_OPTIONS = '<option>فلسطيني</option><option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>';
+  var CHILD_COLS=[
+    ['n1','word','word'],['n2','word','word'],['n3','word','word'],['n4','word3','word3'],
+    ['mother_name','text','mother1'],['birth_place','text','req'],['birth_date','date','req'],['gender','gsel','req'],
+    ['saudi_residency','text','res10'],['palestinian_id','text','id9opt'],
+    ['passport_type','cdoc',''],['passport_no','text','optdigits']
+  ];
+  var childrenWrap=document.getElementById('childrenWrap'),childrenBody=document.getElementById('childrenBody');
+  function childRow(i){
+    var tr=document.createElement('tr');var html='<td>'+i+'</td>';
+    CHILD_COLS.forEach(function(c){
+      var isText=(c[1]==='text'&&(c[2]==='mother1'||c[2]==='req'));
+      var isWord=(c[1]==='word');
+      var isWord3=(c[1]==='word3');
+      if(c[1]==='doc'){
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype=""><option value="" selected>—</option>'+DOC_OPTIONS+'</select></td>';
+      }else if(c[1]==='cdoc'){
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="" data-cdoc="'+i+'"><option value="" selected>—</option>'+CHILD_DOC_OPTIONS+'</select>'+
+          '<input name="child'+i+'_passport_type_other" data-cdocother="'+i+'" placeholder="حدد النوع" style="display:none;margin-top:4px"></td>';
+      }else if(c[1]==='gsel'){
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="req"><option value="" selected>—</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></td>';
+      }else if(isWord3){
+        html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word3 data-cvtype="word3"></td>';
+      }else if(isWord){
+        html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word data-cvtype="word"></td>';
+      }else{
+        var cap='';
+        if(c[0]==='saudi_residency')cap=' maxlength="10" oninput="capDigits(this,10)"';
+        else if(c[0]==='palestinian_id')cap=' maxlength="9" oninput="capDigits(this,9)"';
+        html+='<td><input type="'+(c[1]==='date'?'date':'text')+'" name="child'+i+'_'+c[0]+'"'+(isText?' data-ar':'')+cap+' data-cvtype="'+c[2]+'"></td>';
+      }
+    });
+    html+='<input type="hidden" name="child'+i+'_name">';
+    tr.innerHTML=html;return tr;
+  }
+  function renderChildren(n){
+    if(!childrenBody)return;
+    childrenBody.innerHTML='';
+    for(var i=1;i<=n;i++)childrenBody.appendChild(childRow(i));
+    childrenWrap.classList.toggle('hidden',n===0);
+    // wire child passport "other" boxes
+    for(var i=1;i<=n;i++)(function(i){
+      var sel=childrenBody.querySelector('[data-cdoc="'+i+'"]');
+      var oth=childrenBody.querySelector('[data-cdocother="'+i+'"]');
+      if(sel&&oth)sel.addEventListener('change',function(){
+        var show=sel.value==='أخرى'; oth.style.display=show?'block':'none'; if(!show)oth.value='';
+      });
+    })(i);
+    wireArabic(childrenBody);
+  }
+  if(childrenCount)childrenCount.addEventListener('change',()=>renderChildren(parseInt(childrenCount.value)||0));
+
+  // ===== live validation (applicant) =====
+  var fullName=document.getElementById('full_name'),mobile=document.getElementById('mobile'),email=document.getElementById('email'),
+      sres=document.getElementById('saudi_residency'),bp=document.getElementById('birth_place'),
+      bd=document.getElementById('birth_date'),emp=document.getElementById('employer'),dist=document.getElementById('district'),
+      rexp=document.getElementById('residency_expiry'),
+      occ=document.getElementById('occupation');
+  // split a stored full name into the 4 part-inputs
+  function splitName(fullname,ids){
+    var parts=(fullname||'').trim().split(/\s+/).filter(Boolean);
+    for(var i=0;i<4;i++){var el=(typeof ids[i]==='string')?document.getElementById(ids[i]):ids[i];if(el)el.value=parts[i]||'';}
+  }
+  var motherEl=document.getElementById('mother_name');
+  if(motherEl)motherEl.addEventListener('blur',()=>setInvalid(motherEl,!oneNameOK(motherEl.value)));
+  wireArabic(document); // applicant text fields
+  mobile.addEventListener('blur',()=>setInvalid(mobile,!phoneOK(mobile.value)));
+  email.addEventListener('blur',()=>setInvalid(email,!emailOK(email.value)));
+  pid.addEventListener('blur',()=>setInvalid(pid,pid.value!==''&&!digitsN(pid.value,9)));
+  sres.addEventListener('blur',()=>setInvalid(sres,!digitsN(sres.value,10)));
+
+  var form=document.getElementById('regForm'),btn=document.getElementById('submitBtn'),statusEl=document.getElementById('status');
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();statusEl.textContent='';statusEl.className='status';var firstBad=null;
+    function bad(el){if(!firstBad)firstBad=el;}
+
+    // top selects
+    ['reason','gender','marital','region'].forEach(function(id){var el=document.getElementById(id);var b=!el.value;setInvalid(el,b);if(b)bad(el);});
+    // applicant required + rules
+    var mn=document.querySelector('[name="mother_name"]');
+    // four separate name parts
+    var nameParts=[document.getElementById('name1'),document.getElementById('name2'),document.getElementById('name3'),document.getElementById('name4')];
+    nameParts.forEach(function(el,idx){var ok=(idx===3)?arabicWords3OK(el.value):arabicWordOK(el.value);setInvalid(el,!ok);if(!ok)bad(el);});
+    // combine into hidden full_name
+    document.getElementById('full_name').value=nameParts.map(function(e){return e.value.trim();}).join(' ');
+    [[mn,oneNameOK(mn.value)],
+     [sres,(sres.dataset.optional==='1'?(sres.value===''||digitsN(sres.value,10)):digitsN(sres.value,10))],[rexp,(sres.dataset.optional==='1'?true:!!rexp.value)],[bp,!!bp.value],[bd,!!bd.value],
+     [occ,!!occ.value],[emp,!!emp.value],[dist,!!dist.value],
+     [mobile,phoneOK(mobile.value)],[email,emailOK(email.value)]
+    ].forEach(function(x){setInvalid(x[0],!x[1]);if(!x[1])bad(x[0]);});
+    // palestinian id optional but if filled must be 9
+    var pidOK=pid.value===''||digitsN(pid.value,9);setInvalid(pid,!pidOK);if(!pidOK)bad(pid);
+
+    // travel documents: both questions answered, at least one = yes
+    (function(){
+      var hasPass=document.querySelector('input[name="hasPassport"]:checked');
+      var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
+      var passField=document.getElementById('hasPassportErr').closest('.field');
+      var wathField=document.getElementById('hasWathiqaErr').closest('.field');
+      document.getElementById('hasPassportErr').textContent='هذا الحقل مطلوب';
+      document.getElementById('hasWathiqaErr').textContent='هذا الحقل مطلوب';
+      // both must be answered
+      if(!hasPass){ passField.classList.add('invalid'); bad(passField.querySelector('input')); } else passField.classList.remove('invalid');
+      if(!hasWath){ wathField.classList.add('invalid'); bad(wathField.querySelector('input')); } else wathField.classList.remove('invalid');
+      if(!hasPass || !hasWath) return;
+      // at least one yes
+      if(hasPass.value==='no' && hasWath.value==='no'){
+        passField.classList.add('invalid'); wathField.classList.add('invalid');
+        document.getElementById('hasWathiqaErr').textContent='يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل';
+        bad(passField.querySelector('input')); return;
+      }
+      // passport = yes -> passport fields required
+      if(hasPass.value==='yes'){
+        var pno=document.getElementById('passport_no'), pex=document.getElementById('passport_expiry');
+        var pnoOK=pno.value.trim()!==''&&digitsOnly(pno.value); setInvalid(pno,!pnoOK); if(!pnoOK)bad(pno);
+        var pexOK=!!pex.value; setInvalid(pex,!pexOK); if(!pexOK)bad(pex);
+      }
+      // wathiqa = yes -> wathiqa fields required
+      if(hasWath.value==='yes'){
+        var dt=document.getElementById('travel_doc_type'), dn=document.getElementById('travel_doc_no'), de=document.getElementById('travel_doc_expiry');
+        var dtOK=!!dt.value; setInvalid(dt,!dtOK); if(!dtOK)bad(dt);
+        if(dt.value==='أخرى'){var oth=document.querySelector('[name="travel_doc_type_other"]');var oOK=oth.value.trim()!=='';setInvalid(oth,!oOK);if(!oOK)bad(oth);}
+        var dnOK=dn.value.trim()!==''; setInvalid(dn,!dnOK); if(!dnOK)bad(dn);
+        var deOK=!!de.value; setInvalid(de,!deOK); if(!deOK)bad(de);
+      }
+    })();
+
+    // (wife/children sections removed from the form)
+
+    if(firstBad){firstBad.focus();firstBad.scrollIntoView({behavior:'smooth',block:'center'});
+      statusEl.textContent='يرجى تصحيح الحقول المميزة بالأحمر';statusEl.classList.add('err');return;}
+
+    var data={};new FormData(form).forEach((v,k)=>data[k]=v);
+    data.submitted_at=new Date().toISOString();
+
+    btn.disabled=true;btn.textContent='جارٍ الإرسال…';
+    try{
+      await fetch(WEB_APP_URL,{method:'POST',mode:'no-cors',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+        body:new URLSearchParams(data).toString()});
+      document.getElementById('sheet').innerHTML='<div class="done"><div class="check">✓</div>'+
+        '<h2>تم إرسال الاستمارة بنجاح</h2><p>تم استلام بياناتك لدى سفارة دولة فلسطين.</p>'+
+        '<button onclick="location.reload()">تعبئة استمارة جديدة</button></div>';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }catch(err){
+      btn.disabled=false;btn.textContent='إرسال الاستمارة';
+      statusEl.textContent='تعذّر الإرسال، تحقق من الإنترنت';statusEl.classList.add('err');
+    }
+  });
+</script>
+</body>
+</html>
