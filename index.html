@@ -309,34 +309,6 @@
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
-        <div class="field">
-          <label>الحالة الاجتماعية <span class="req">*</span> <span class="info" data-tip="اختر حالتك: أعزب/متزوج/مطلق/أرمل.">i</span></label>
-          <select name="marital_status" id="marital" required>
-            <option value="" disabled selected>— اختر —</option>
-            <option value="أعزب / عزباء">أعزب / عزباء</option>
-            <option value="متزوج / متزوجة">متزوج / متزوجة</option>
-            <option value="مطلق / مطلقة">مطلق / مطلقة</option>
-            <option value="أرمل / أرملة">أرمل / أرملة</option>
-          </select>
-          <div class="err-msg">هذا الحقل مطلوب</div>
-        </div>
-        <div class="field hidden" id="wifeNameField">
-          <label>اسم الزوجة الرباعي <span class="req">*</span> <span class="info" data-tip="اسم الزوجة الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>
-          <input name="wife_name" id="wife_name" data-ar placeholder="الاسم الأول الثاني الثالث الرابع">
-          <div class="err-msg">مطلوب — أربعة أسماء بالحروف العربية</div>
-        </div>
-        <div class="field hidden" id="wifeNatField">
-          <label>جنسية الزوجة <span class="req">*</span> <span class="info" data-tip="اختر جنسية الزوجة.">i</span></label>
-          <select name="wife_nationality" id="wife_nationality">
-            <option value="" disabled selected>— اختر —</option>
-          </select>
-          <div class="err-msg">هذا الحقل مطلوب</div>
-        </div>
-        <div class="field hidden" id="wifeNatOtherField">
-          <label>حدد جنسية الزوجة <span class="req">*</span> <span class="info" data-tip="اكتب الجنسية إذا اخترت «أخرى».">i</span></label>
-          <input name="wife_nationality_other" id="wife_nationality_other" data-ar placeholder="اكتب الجنسية">
-          <div class="err-msg">هذا الحقل مطلوب</div>
-        </div>
         <div class="field"><label>المهنة <span class="req">*</span> <span class="info" data-tip="مهنتك الحالية بالحروف العربية.">i</span></label><input name="occupation" id="occupation" data-ar required><div class="err-msg">هذا الحقل مطلوب</div></div>
         <div class="field">
           <label>جهة العمل <span class="req">*</span> <span class="info" data-tip="اسم جهة عملك بالحروف العربية.">i</span></label>
@@ -367,6 +339,34 @@
         <div class="field">
           <label>الحي / المدينة <span class="req">*</span> <span class="info" data-tip="اسم الحي أو المدينة بالحروف العربية.">i</span></label>
           <input name="district" id="district" data-ar required placeholder="اكتب الحي أو المدينة">
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>الحالة الاجتماعية <span class="req">*</span> <span class="info" data-tip="اختر حالتك: أعزب/متزوج/مطلق/أرمل.">i</span></label>
+          <select name="marital_status" id="marital" required>
+            <option value="" disabled selected>— اختر —</option>
+            <option value="أعزب / عزباء">أعزب / عزباء</option>
+            <option value="متزوج / متزوجة">متزوج / متزوجة</option>
+            <option value="مطلق / مطلقة">مطلق / مطلقة</option>
+            <option value="أرمل / أرملة">أرمل / أرملة</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field hidden" id="wifeNameField">
+          <label>اسم الزوج أو الزوجة الرباعي <span class="req">*</span> <span class="info" data-tip="اسم الزوج أو الزوجة الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>
+          <input name="wife_name" id="wife_name" data-ar placeholder="الاسم الأول الثاني الثالث الرابع">
+          <div class="err-msg">مطلوب — أربعة أسماء بالحروف العربية</div>
+        </div>
+        <div class="field hidden" id="wifeNatField">
+          <label>جنسية الزوج أو الزوجة <span class="req">*</span> <span class="info" data-tip="اختر جنسية الزوج أو الزوجة.">i</span></label>
+          <select name="wife_nationality" id="wife_nationality">
+            <option value="" disabled selected>— اختر —</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field hidden" id="wifeNatOtherField">
+          <label>حدد جنسية الزوج أو الزوجة <span class="req">*</span> <span class="info" data-tip="اكتب الجنسية إذا اخترت «أخرى».">i</span></label>
+          <input name="wife_nationality_other" id="wife_nationality_other" data-ar placeholder="اكتب الجنسية">
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
       </div>
