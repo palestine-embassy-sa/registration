@@ -431,6 +431,36 @@
 
 <script>
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxw7v2kiz2MYz6fLYJM5GuYQOhKQydzFT4va_1EvKIlR_-AGyLnQ_ESN9sJB_Vz6c61Wg/exec";
+  // شاشة النجاح
+  function showDone(msg){
+    document.getElementById('sheet').innerHTML='<div class="done"><div class="check">✓</div>'+
+      '<h2>تم إرسال الاستمارة بنجاح</h2><p>'+(msg||'تم استلام بياناتك لدى سفارة دولة فلسطين.')+'</p>'+
+      '<button onclick="location.reload()">تعبئة استمارة جديدة</button></div>';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  // إرسال سجل مباشرة إلى الخادم
+  async function postRecord(data){
+    await fetch(WEB_APP_URL,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body:new URLSearchParams(data).toString()});
+  }
+  // يحوّل أي صيغة تاريخ إلى yyyy-MM-dd المطلوبة لحقول التاريخ
+  function normDate(v){
+    if(v==null)return '';
+    v=String(v).trim(); if(v==='')return '';
+    // موجودة أصلاً بالصيغة الصحيحة (وقد تحمل وقتاً بعدها)
+    var m=v.match(/^(\d{4})-(\d{2})-(\d{2})/); if(m)return m[1]+'-'+m[2]+'-'+m[3];
+    // dd/MM/yyyy أو MM/dd/yyyy
+    var s=v.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+    if(s){var a=parseInt(s[1],10),bb=parseInt(s[2],10),y=s[3];
+      var dd=a>12?a:a, mm=bb; // نفترض dd/MM
+      if(a>12){dd=a;mm=bb;}else if(bb>12){mm=a;dd=bb;}else{dd=a;mm=bb;}
+      return y+'-'+('0'+mm).slice(-2)+'-'+('0'+dd).slice(-2);}
+    // محاولة أخيرة عبر Date
+    var d=new Date(v); if(!isNaN(d.getTime())){
+      return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+    return '';
+  }
   // النقر على أيقونة المعلومات يُظهر التلميح على الجوال (لا يوجد تمرير باللمس)
   document.addEventListener('click',function(e){
     var icon=e.target.closest && e.target.closest('.info');
@@ -576,7 +606,7 @@
     }
   }
 
-  function gateProceed(mode){
+  async function gateProceed(mode){
     var err=document.getElementById('gateFoundErr');
     var purposeEl=document.getElementById('gatePurpose');
     var purpose=purposeEl.value;
@@ -591,17 +621,24 @@
     }
     if(mode==='update'){
       openForm(true,__prefill||{});
+      var r=document.getElementById('reason'); if(r){r.value=purpose; r.dispatchEvent(new Event('change'));}
     }else{
-      var seed={__type:__gateType};
-      var sid=document.getElementById('gate_saudi').value.trim();
-      var pal=document.getElementById('gate_pal').value.trim();
-      var bnum=document.getElementById('gate_border').value.trim();
-      if(sid)seed.saudi_residency=sid;
-      if(pal)seed.palestinian_id=pal;
-      if(bnum)seed.border_no=bnum;
-      openForm(false,seed);
+      // طلب جديد: أرسل مباشرة بناءً على البيانات المحفوظة دون إعادة التعبئة
+      var rec=Object.assign({},__prefill||{});
+      // احتفظ فقط بحقول البيانات، واضبط سبب الزيارة والوقت
+      delete rec.__type; delete rec.row; delete rec.status; delete rec.tags; delete rec.admin_notes;
+      rec.reason=purpose;
+      rec.submitted_at=new Date().toISOString();
+      var ubtn=document.querySelector('#gateFound .newreq');
+      if(ubtn){ubtn.disabled=true;ubtn.textContent='جارٍ الإرسال…';}
+      try{
+        await postRecord(rec);
+        showDone('تم إرسال طلبك الجديد بنجاح بناءً على بياناتك المسجّلة مسبقاً.');
+      }catch(e){
+        if(ubtn){ubtn.disabled=false;ubtn.textContent='طلب جديد';}
+        err.textContent='تعذّر الإرسال، تحقق من الاتصال بالإنترنت وحاول مجدداً.';
+      }
     }
-    var r=document.getElementById('reason'); if(r){r.value=purpose; r.dispatchEvent(new Event('change'));}
   }
 
   function openForm(isUpdate, seed){
@@ -630,8 +667,12 @@
       Object.keys(seed).forEach(function(k){
         if(k==='__type')return;
         var el=f.querySelector('[name="'+k+'"]');
-        if(el && seed[k]!=null && seed[k]!=='' && el.tagName!=='SELECT'){ el.value=seed[k]; }
-        else if(el && el.tagName==='SELECT' && seed[k]){ el.value=seed[k]; }
+        if(!el)return;
+        var val=seed[k];
+        if(val==null||val==='')return;
+        if(el.tagName==='SELECT'){ el.value=val; }
+        else if(el.type==='date'){ el.value=normDate(val); }
+        else { el.value=val; }
       });
       // trigger dependent UI (marital -> wives/children, pal id -> passport req)
       ['marital_status','palestinian_id','reason','travel_doc_type'].forEach(function(nm){
@@ -650,14 +691,13 @@
         if(hasW){var wYes=document.querySelector('input[name="hasWathiqa"][value="yes"]');if(wYes)wYes.checked=true;}
         else{var wNo=document.querySelector('input[name="hasWathiqa"][value="no"]');if(wNo)wNo.checked=true;}
         toggleTravelDocs();
-        if(hasP){var pno=document.getElementById('passport_no');if(pno)pno.value=seed.passport_no||'';var pex=document.getElementById('passport_expiry');if(pex&&seed.passport_expiry)pex.value=seed.passport_expiry;}
+        if(hasP){var pno=document.getElementById('passport_no');if(pno)pno.value=seed.passport_no||'';var pex=document.getElementById('passport_expiry');if(pex&&seed.passport_expiry)pex.value=normDate(seed.passport_expiry);}
         if(hasW){var dt=document.getElementById('travel_doc_type');if(dt)dt.value=seed.travel_doc_type||'';toggleTravelDocs();
           var dn=document.getElementById('travel_doc_no');if(dn)dn.value=seed.travel_doc_no||'';
-          var de=document.getElementById('travel_doc_expiry');if(de&&seed.travel_doc_expiry)de.value=seed.travel_doc_expiry;
+          var de=document.getElementById('travel_doc_expiry');if(de&&seed.travel_doc_expiry)de.value=normDate(seed.travel_doc_expiry);
           if(seed.travel_doc_type_other){var o=document.querySelector('[name="travel_doc_type_other"]');if(o)o.value=seed.travel_doc_type_other;}}
       })();
-      // if updating, also rebuild wives/children then fill them
-      if(isUpdate){ prefillFamily(seed); }
+      // (wife/children sections removed — wife_name & wife_nationality prefilled by main loop above)
     }
     f.scrollIntoView({behavior:'smooth',block:'start'});
     // banner to show mode
@@ -1041,13 +1081,8 @@
 
     btn.disabled=true;btn.textContent='جارٍ الإرسال…';
     try{
-      await fetch(WEB_APP_URL,{method:'POST',mode:'no-cors',
-        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-        body:new URLSearchParams(data).toString()});
-      document.getElementById('sheet').innerHTML='<div class="done"><div class="check">✓</div>'+
-        '<h2>تم إرسال الاستمارة بنجاح</h2><p>تم استلام بياناتك لدى سفارة دولة فلسطين.</p>'+
-        '<button onclick="location.reload()">تعبئة استمارة جديدة</button></div>';
-      window.scrollTo({top:0,behavior:'smooth'});
+      await postRecord(data);
+      showDone();
     }catch(err){
       btn.disabled=false;btn.textContent='إرسال الاستمارة';
       statusEl.textContent='تعذّر الإرسال، تحقق من الإنترنت';statusEl.classList.add('err');
