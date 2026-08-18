@@ -65,11 +65,10 @@
   table.children input:focus,table.children select:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 2px rgba(122,31,43,.12);background:#fff}
   table.children input.bad,table.children select.bad{border-color:var(--wine);background:#fff6f7}
   .hidden{display:none !important}
-  .actions{margin-top:28px;display:flex;justify-content:center}
-  .backrow{padding:16px 30px 0}
-  .backbtn{background:#fff;border:1.5px solid var(--wine-line);color:var(--wine);font-family:inherit;font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:20px;cursor:pointer;transition:all .15s}
+  .actions{margin-top:28px;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:0 30px}
+  .backbtn{background:#fff;border:1.5px solid var(--wine-line);color:var(--wine);font-family:inherit;font-weight:700;font-size:13.5px;padding:11px 18px;border-radius:24px;cursor:pointer;transition:all .15s}
   .backbtn:hover{background:var(--wine);color:#fff;border-color:var(--wine)}
-  @media(max-width:660px){.backrow{padding:12px 14px 0}}
+  @media(max-width:660px){.actions{padding:0 14px;gap:10px}.backbtn{font-size:12.5px;padding:10px 14px}}
   button.submit{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;border:none;font-family:inherit;font-weight:800;font-size:16px;padding:14px 44px;border-radius:26px;cursor:pointer;box-shadow:0 6px 18px rgba(122,31,43,.25)}
   button.submit:hover{transform:translateY(-1px)}
   button.submit:disabled{opacity:.6;cursor:not-allowed}
@@ -106,7 +105,7 @@
     /* children table: allow horizontal scroll, keep inputs usable */
     table.children{min-width:900px}
     .count-row{gap:8px}
-    button.submit{width:100%;padding:14px}
+    button.submit{flex:1;padding:14px 20px}
   }
   @media(max-width:400px){
     .typechoice{flex-direction:column}
@@ -222,8 +221,6 @@
 
 
   <form id="regForm" novalidate class="hidden">
-
-    <div class="backrow"><button type="button" class="backbtn" onclick="goBackToGate()">→ الرجوع إلى البداية</button></div>
 
     <!-- Reason -->
     <div class="section">
@@ -429,7 +426,7 @@
       </div>
     </div>
 
-    <div class="actions"><button type="submit" class="submit" id="submitBtn">إرسال الاستمارة</button></div>
+    <div class="actions"><button type="submit" class="submit" id="submitBtn">إرسال الاستمارة</button><button type="button" class="backbtn" onclick="goBackToGate()">→ الرجوع إلى البداية</button></div>
     <div class="status" id="status"></div>
     <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
   </form>
