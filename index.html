@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>استمارة تسجيل مواطن — سفارة دولة فلسطين</title>
+<title>استمارة تسجيل مواطن - سفارة دولة فلسطين</title>
 <style>
   :root{--wine:#7A1F2B;--wine-soft:#8f3742;--wine-line:#e3cfd2;--gold:#B8860B;--gold-soft:#d9b24a;
     --ink:#2a2226;--muted:#6b6169;--line:#e7e2e4;--line-strong:#c9bfc3;--page:#f7f4f2;--card:#fff;
@@ -198,11 +198,11 @@
 
       <!-- إذا كان مسجّلاً: اختيار الغرض + تحديث/طلب جديد -->
       <div id="gateFound">
-        <div class="who">تم العثور على سجل باسم: <span id="foundName">—</span></div>
+        <div class="who">تم العثور على سجل باسم: <span id="foundName">-</span></div>
         <div class="purpose">
           <label style="font-weight:700;font-size:13.5px;display:block;margin-bottom:5px">سبب الحضور <span class="req">*</span></label>
           <select id="gatePurpose">
-            <option value="" disabled selected>— اختر —</option>
+            <option value="" disabled selected>- اختر -</option>
             <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
             <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
             <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
@@ -229,7 +229,7 @@
         <div class="field full">
           <label>سبب الزيارة <span class="req">*</span> <span class="info" data-tip="اختر سبب مراجعتك للسفارة من القائمة.">i</span></label>
           <select name="reason" id="reason" required>
-            <option value="" disabled selected>— اختر —</option>
+            <option value="" disabled selected>- اختر -</option>
             <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
             <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
             <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
@@ -251,22 +251,22 @@
         <div class="field">
           <label>الاسم الأول <span class="req">*</span> <span class="info" data-tip="الاسم الأول بالحروف العربية (اسم واحد فقط).">i</span></label>
           <input name="name1" id="name1" data-word required placeholder="الاسم الأول">
-          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+          <div class="err-msg">مطلوب - اسم واحد بالحروف العربية فقط</div>
         </div>
         <div class="field">
           <label>الاسم الثاني <span class="req">*</span> <span class="info" data-tip="الاسم الثاني (اسم الأب) بالحروف العربية.">i</span></label>
           <input name="name2" id="name2" data-word required placeholder="الاسم الثاني">
-          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+          <div class="err-msg">مطلوب - اسم واحد بالحروف العربية فقط</div>
         </div>
         <div class="field">
           <label>الاسم الثالث <span class="req">*</span> <span class="info" data-tip="الاسم الثالث (اسم الجد) بالحروف العربية.">i</span></label>
           <input name="name3" id="name3" data-word required placeholder="الاسم الثالث">
-          <div class="err-msg">مطلوب — اسم واحد بالحروف العربية فقط</div>
+          <div class="err-msg">مطلوب - اسم واحد بالحروف العربية فقط</div>
         </div>
         <div class="field">
           <label>الاسم الرابع (العائلة) <span class="req">*</span> <span class="info" data-tip="اسم العائلة بالحروف العربية (حتى 3 كلمات).">i</span></label>
           <input name="name4" id="name4" data-word3 required placeholder="اسم العائلة">
-          <div class="err-msg">مطلوب — بالحروف العربية (حتى 3 كلمات)</div>
+          <div class="err-msg">مطلوب - بالحروف العربية (حتى 3 كلمات)</div>
         </div>
         <input type="hidden" name="full_name" id="full_name">
         <div class="field">
@@ -294,8 +294,15 @@
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
         <div class="field">
-          <label>مكان الميلاد <span class="req">*</span> <span class="info" data-tip="مدينة/بلد الميلاد بالحروف العربية.">i</span></label>
-          <input name="birth_place" id="birth_place" data-ar required>
+          <label>مكان الميلاد (الدولة) <span class="req">*</span> <span class="info" data-tip="اختر دولة الميلاد.">i</span></label>
+          <select name="birth_place" id="birth_place" required>
+            <option value="" disabled selected>- اختر -</option>
+          </select>
+          <div class="err-msg">هذا الحقل مطلوب</div>
+        </div>
+        <div class="field">
+          <label>مدينة الميلاد <span class="req">*</span> <span class="info" data-tip="اكتب مدينة الميلاد بالحروف العربية.">i</span></label>
+          <input name="birth_city" id="birth_city" data-ar required placeholder="اكتب المدينة">
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
         <div class="field">
@@ -306,7 +313,7 @@
         <div class="field">
           <label>الجنس <span class="req">*</span> <span class="info" data-tip="اختر الجنس: ذكر أو أنثى.">i</span></label>
           <select name="gender" id="gender" required>
-            <option value="" disabled selected>— اختر —</option>
+            <option value="" disabled selected>- اختر -</option>
             <option value="ذكر">ذكر</option>
             <option value="أنثى">أنثى</option>
           </select>
@@ -331,7 +338,7 @@
         <div class="field">
           <label>المنطقة في السعودية <span class="req">*</span> <span class="info" data-tip="اختر منطقة سكنك داخل السعودية.">i</span></label>
           <select name="region" id="region" required>
-            <option value="" disabled selected>— اختر —</option>
+            <option value="" disabled selected>- اختر -</option>
             <option>منطقة الرياض</option><option>منطقة مكة المكرمة</option><option>منطقة المدينة المنورة</option>
             <option>المنطقة الشرقية</option><option>منطقة القصيم</option><option>منطقة عسير</option>
             <option>منطقة تبوك</option><option>منطقة حائل</option><option>منطقة الحدود الشمالية</option>
@@ -347,7 +354,7 @@
         <div class="field">
           <label>الحالة الاجتماعية <span class="req">*</span> <span class="info" data-tip="اختر حالتك: أعزب/متزوج/مطلق/أرمل.">i</span></label>
           <select name="marital_status" id="marital" required>
-            <option value="" disabled selected>— اختر —</option>
+            <option value="" disabled selected>- اختر -</option>
             <option value="أعزب / عزباء">أعزب / عزباء</option>
             <option value="متزوج / متزوجة">متزوج / متزوجة</option>
             <option value="مطلق / مطلقة">مطلق / مطلقة</option>
@@ -358,12 +365,12 @@
         <div class="field hidden" id="wifeNameField">
           <label>اسم الزوج أو الزوجة الرباعي <span class="req">*</span> <span class="info" data-tip="اسم الزوج أو الزوجة الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>
           <input name="wife_name" id="wife_name" data-ar placeholder="الاسم الأول الثاني الثالث الرابع">
-          <div class="err-msg">مطلوب — أربعة أسماء بالحروف العربية</div>
+          <div class="err-msg">مطلوب - أربعة أسماء بالحروف العربية</div>
         </div>
         <div class="field hidden" id="wifeNatField">
           <label>جنسية الزوج أو الزوجة <span class="req">*</span> <span class="info" data-tip="اختر جنسية الزوج أو الزوجة.">i</span></label>
           <select name="wife_nationality" id="wife_nationality">
-            <option value="" disabled selected>— اختر —</option>
+            <option value="" disabled selected>- اختر -</option>
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
@@ -393,7 +400,7 @@
         <div class="field hidden" data-passgrp="1">
           <label>رقم جواز السفر الفلسطيني <span class="req">*</span> <span class="info" data-tip="رقم جواز السفر الفلسطيني (أرقام فقط).">i</span></label>
           <input name="passport_no" id="passport_no" inputmode="numeric" placeholder="أرقام فقط">
-          <div class="err-msg">مطلوب — أرقام فقط</div>
+          <div class="err-msg">مطلوب - أرقام فقط</div>
         </div>
         <div class="field hidden" data-passgrp="1"><label>تاريخ انتهاء الجواز <span class="req">*</span> <span class="info" data-tip="تاريخ انتهاء جواز السفر.">i</span></label><input type="date" name="passport_expiry" id="passport_expiry"><div class="err-msg">هذا الحقل مطلوب</div></div>
 
@@ -411,7 +418,7 @@
         <div class="field hidden" data-docgrp="1">
           <label>نوع وثيقة السفر <span class="req">*</span> <span class="info" data-tip="اختر نوع وثيقة السفر.">i</span></label>
           <select name="travel_doc_type" id="travel_doc_type">
-            <option value="" selected>— اختر —</option>
+            <option value="" selected>- اختر -</option>
             <option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
@@ -608,14 +615,14 @@
       var d=await _jsonp({action:'lookup',saudi_residency:sid,palestinian_id:pal,border_no:bnum});
       if(d && d.found){
         __prefill=d.record||{};
-        document.getElementById('foundName').textContent=__prefill.full_name||'—';
+        document.getElementById('foundName').textContent=__prefill.full_name||'-';
         document.getElementById('gateFound').style.display='block';
         document.getElementById('gateFound').scrollIntoView({behavior:'smooth',block:'center'});
       }else{
         openForm(false,seed);
       }
     }catch(e){
-      err.textContent='تعذّر التحقق من الخادم — يمكنك المتابعة بتعبئة الاستمارة.';
+      err.textContent='تعذّر التحقق من الخادم - يمكنك المتابعة بتعبئة الاستمارة.';
       openForm(false,seed);
     }finally{
       gBtn.disabled=false; gBtn.textContent='متابعة';
@@ -713,7 +720,7 @@
           var de=document.getElementById('travel_doc_expiry');if(de&&seed.travel_doc_expiry)de.value=normDate(seed.travel_doc_expiry);
           if(seed.travel_doc_type_other){var o=document.querySelector('[name="travel_doc_type_other"]');if(o)o.value=seed.travel_doc_type_other;}}
       })();
-      // (wife/children sections removed — wife_name & wife_nationality prefilled by main loop above)
+      // (wife/children sections removed - wife_name & wife_nationality prefilled by main loop above)
     }
     f.scrollIntoView({behavior:'smooth',block:'start'});
     // banner to show mode
@@ -749,11 +756,12 @@
     var n=document.querySelector('.notice');
     if(!n) return;
     n.textContent = isUpdate
-      ? '✎ وضع التحديث: تم تحميل بياناتك السابقة — عدّل ما يلزم ثم أرسل.'
+      ? '✎ وضع التحديث: تم تحميل بياناتك السابقة - عدّل ما يلزم ثم أرسل.'
       : '⚠ تنبيه: هذه البيانات سرية ويجب تعبئتها بشكل صحيح وبمعلومات دقيقة وكاملة.';
   }
 
-  const NAT_OPTIONS = `<option>فلسطينية</option><option>سعودية</option><option>أردنية</option><option>لبنانية</option><option>سورية</option><option>مصرية</option><option>عراقية</option><option>يمنية</option><option>كويتية</option><option>إماراتية</option><option>قطرية</option><option>بحرينية</option><option>عُمانية</option><option>سودانية</option><option>ليبية</option><option>تونسية</option><option>جزائرية</option><option>مغربية</option><option>موريتانية</option><option>صومالية</option><option>جيبوتية</option><option>جزر القمر</option><option>نيجيرية</option><option>إثيوبية</option><option>كينية</option><option>غانية</option><option>سنغالية</option><option>إيفوارية</option><option>كاميرونية</option><option>أوغندية</option><option>تنزانية</option><option>زامبية</option><option>زيمبابوية</option><option>أنغولية</option><option>موزمبيقية</option><option>جنوب أفريقية</option><option>مالية</option><option>نيجرية</option><option>تشادية</option><option>إريترية</option><option>رواندية</option><option>بوروندية</option><option>ليبيرية</option><option>سيراليونية</option><option>توغولية</option><option>بنينية</option><option>غينية</option><option>غابونية</option><option>كونغولية</option><option>مدغشقرية</option><option>مالاوية</option><option>بوتسوانية</option><option>ناميبية</option><option>تركية</option><option>إيرانية</option><option>أفغانية</option><option>باكستانية</option><option>أذربيجانية</option><option>أرمينية</option><option>جورجية</option><option>كازاخستانية</option><option>أوزبكية</option><option>تركمانية</option><option>طاجيكية</option><option>قرغيزية</option><option>هندية</option><option>بنغلاديشية</option><option>سريلانكية</option><option>نيبالية</option><option>بوتانية</option><option>مالديفية</option><option>إندونيسية</option><option>ماليزية</option><option>فلبينية</option><option>تايلاندية</option><option>فيتنامية</option><option>سنغافورية</option><option>ميانمارية</option><option>كمبودية</option><option>لاوسية</option><option>بروناوية</option><option>تيمورية</option><option>صينية</option><option>يابانية</option><option>كورية جنوبية</option><option>كورية شمالية</option><option>منغولية</option><option>تايوانية</option><option>هونغ كونغية</option><option>بريطانية</option><option>إيرلندية</option><option>فرنسية</option><option>ألمانية</option><option>إيطالية</option><option>إسبانية</option><option>برتغالية</option><option>هولندية</option><option>بلجيكية</option><option>سويسرية</option><option>نمساوية</option><option>سويدية</option><option>نرويجية</option><option>دنماركية</option><option>فنلندية</option><option>آيسلندية</option><option>يونانية</option><option>بولندية</option><option>تشيكية</option><option>سلوفاكية</option><option>مجرية</option><option>رومانية</option><option>بلغارية</option><option>أوكرانية</option><option>روسية</option><option>بيلاروسية</option><option>صربية</option><option>كرواتية</option><option>سلوفينية</option><option>بوسنية</option><option>ألبانية</option><option>مقدونية</option><option>مالطية</option><option>قبرصية</option><option>لوكسمبورغية</option><option>ليتوانية</option><option>لاتفية</option><option>إستونية</option><option>أمريكية</option><option>كندية</option><option>مكسيكية</option><option>برازيلية</option><option>أرجنتينية</option><option>تشيلية</option><option>كولومبية</option><option>فنزويلية</option><option>بيروفية</option><option>إكوادورية</option><option>بوليفية</option><option>باراغوانية</option><option>أوروغوانية</option><option>كوبية</option><option>دومينيكية</option><option>هايتية</option><option>جامايكية</option><option>بنمية</option><option>كوستاريكية</option><option>غواتيمالية</option><option>هندوراسية</option><option>سلفادورية</option><option>نيكاراغوية</option><option>أسترالية</option><option>نيوزيلندية</option><option>فيجية</option><option>بابوا غينيا الجديدة</option><option>أخرى</option>`;
+  const COUNTRY_OPTIONS = `<option>فلسطين</option><option>السعودية</option><option>الأردن</option><option>لبنان</option><option>سوريا</option><option>مصر</option><option>العراق</option><option>اليمن</option><option>الكويت</option><option>الإمارات</option><option>قطر</option><option>البحرين</option><option>عُمان</option><option>السودان</option><option>ليبيا</option><option>تونس</option><option>الجزائر</option><option>المغرب</option><option>موريتانيا</option><option>الصومال</option><option>جيبوتي</option><option>جزر القمر</option><option>نيجيريا</option><option>إثيوبيا</option><option>كينيا</option><option>غانا</option><option>السنغال</option><option>ساحل العاج</option><option>الكاميرون</option><option>أوغندا</option><option>تنزانيا</option><option>زامبيا</option><option>زيمبابوي</option><option>أنغولا</option><option>موزمبيق</option><option>جنوب أفريقيا</option><option>مالي</option><option>النيجر</option><option>تشاد</option><option>إريتريا</option><option>رواندا</option><option>بوروندي</option><option>ليبيريا</option><option>سيراليون</option><option>توغو</option><option>بنين</option><option>غينيا</option><option>الغابون</option><option>الكونغو</option><option>مدغشقر</option><option>مالاوي</option><option>بوتسوانا</option><option>ناميبيا</option><option>تركيا</option><option>إيران</option><option>أفغانستان</option><option>باكستان</option><option>أذربيجان</option><option>أرمينيا</option><option>جورجيا</option><option>كازاخستان</option><option>أوزبكستان</option><option>تركمانستان</option><option>طاجيكستان</option><option>قرغيزستان</option><option>الهند</option><option>بنغلاديش</option><option>سريلانكا</option><option>نيبال</option><option>بوتان</option><option>المالديف</option><option>إندونيسيا</option><option>ماليزيا</option><option>الفلبين</option><option>تايلاند</option><option>فيتنام</option><option>سنغافورة</option><option>ميانمار</option><option>كمبوديا</option><option>لاوس</option><option>بروناي</option><option>تيمور الشرقية</option><option>الصين</option><option>اليابان</option><option>كوريا الجنوبية</option><option>كوريا الشمالية</option><option>منغوليا</option><option>تايوان</option><option>هونغ كونغ</option><option>بريطانيا</option><option>إيرلندا</option><option>فرنسا</option><option>ألمانيا</option><option>إيطاليا</option><option>إسبانيا</option><option>البرتغال</option><option>هولندا</option><option>بلجيكا</option><option>سويسرا</option><option>النمسا</option><option>السويد</option><option>النرويج</option><option>الدنمارك</option><option>فنلندا</option><option>آيسلندا</option><option>اليونان</option><option>بولندا</option><option>التشيك</option><option>سلوفاكيا</option><option>المجر</option><option>رومانيا</option><option>بلغاريا</option><option>أوكرانيا</option><option>روسيا</option><option>بيلاروسيا</option><option>صربيا</option><option>كرواتيا</option><option>سلوفينيا</option><option>البوسنة والهرسك</option><option>ألبانيا</option><option>مقدونيا الشمالية</option><option>مالطا</option><option>قبرص</option><option>لوكسمبورغ</option><option>ليتوانيا</option><option>لاتفيا</option><option>إستونيا</option><option>الولايات المتحدة</option><option>كندا</option><option>المكسيك</option><option>البرازيل</option><option>الأرجنتين</option><option>تشيلي</option><option>كولومبيا</option><option>فنزويلا</option><option>بيرو</option><option>الإكوادور</option><option>بوليفيا</option><option>باراغواي</option><option>أوروغواي</option><option>كوبا</option><option>جمهورية الدومينيكان</option><option>هايتي</option><option>جامايكا</option><option>بنما</option><option>كوستاريكا</option><option>غواتيمالا</option><option>هندوراس</option><option>السلفادور</option><option>نيكاراغوا</option><option>أستراليا</option><option>نيوزيلندا</option><option>فيجي</option><option>بابوا غينيا الجديدة</option><option>أخرى</option>`;
+  const NAT_OPTIONS = `<option>فلسطينية</option>`;
   const DOC_OPTIONS = `<option>وثيقة مصرية</option><option>وثيقة لبنانية</option><option>وثيقة سورية</option><option>وثيقة عراقية</option><option>أخرى</option>`;
 
   // ===== validators =====
@@ -828,7 +836,9 @@
   var wifeNatSel=document.getElementById('wife_nationality');
   var wifeNatOtherField=document.getElementById('wifeNatOtherField');
   var wifeNatOtherInput=document.getElementById('wife_nationality_other');
-  if(wifeNatSel){ wifeNatSel.innerHTML='<option value="" disabled selected>— اختر —</option>'+NAT_OPTIONS; }
+  if(wifeNatSel){ wifeNatSel.innerHTML='<option value="" disabled selected>- اختر -</option>'+COUNTRY_OPTIONS; }
+  var birthPlaceSel=document.getElementById('birth_place');
+  if(birthPlaceSel && birthPlaceSel.tagName==='SELECT'){ birthPlaceSel.innerHTML='<option value="" disabled selected>- اختر -</option>'+COUNTRY_OPTIONS; }
   function syncWifeNatOther(){
     var isOther = wifeNatSel && wifeNatSel.value==='أخرى';
     if(wifeNatOtherField){
@@ -858,7 +868,7 @@
       nameFields(P,'اسم الزوجة')+
       fld(P+'mother_name','اسم والدة الزوجة',true,'mother1','اسم واحد فقط بالعربية','')+
       '<div class="field"><label>الجنسية <span class="req">*</span></label>'+
-        '<select name="'+P+'nationality" data-vtype="req"><option value="" disabled selected>— اختر —</option>'+NAT_OPTIONS+'</select>'+
+        '<select name="'+P+'nationality" data-vtype="req"><option value="" disabled selected>- اختر -</option>'+NAT_OPTIONS+'</select>'+
         '<div class="err-msg">هذا الحقل مطلوب</div></div>'+
       fld(P+'birth_place','مكان الميلاد',true,'req','هذا الحقل مطلوب','')+
       fldDate(P+'birth_date','تاريخ الميلاد',true)+
@@ -877,7 +887,7 @@
         '<div class="err-msg">أرقام فقط</div></div>'+
       fldDate(P+'passport_expiry','تاريخ انتهاء الجواز',false)+
       '<div class="field"><label>نوع وثيقة السفر</label>'+
-        '<select name="'+P+'doc_type" data-doc="'+i+'"><option value="" selected>— اختر —</option>'+DOC_OPTIONS+'</select></div>'+
+        '<select name="'+P+'doc_type" data-doc="'+i+'"><option value="" selected>- اختر -</option>'+DOC_OPTIONS+'</select></div>'+
       '<div class="field hidden" data-docother="'+i+'"><label>حدد نوع الوثيقة</label><input name="'+P+'doc_type_other"></div>'+
       fld(P+'doc_no','رقم وثيقة السفر',false,'opt','','')+
       '</div>';
@@ -890,8 +900,8 @@
         '<input name="'+P+n+'" '+(three?'data-word3 data-vtype="word3"':'data-word data-vtype="word"')+' placeholder="'+ph+'">'+
         '<div class="err-msg">'+(three?'بالحروف العربية (حتى 3 كلمات)':'اسم واحد بالحروف العربية فقط')+'</div></div>';
     }
-    return one('n1',lbl+' — الأول','الأول')+one('n2',lbl+' — الثاني','الثاني')+
-           one('n3',lbl+' — الثالث','الثالث')+one('n4',lbl+' — الرابع (العائلة)','العائلة',true)+
+    return one('n1',lbl+' - الأول','الأول')+one('n2',lbl+' - الثاني','الثاني')+
+           one('n3',lbl+' - الثالث','الثالث')+one('n4',lbl+' - الرابع (العائلة)','العائلة',true)+
            '<input type="hidden" name="'+P+'name">';
   }
   function fld(name,label,req,vtype,msg,ph,extraId){
@@ -965,12 +975,12 @@
       var isWord=(c[1]==='word');
       var isWord3=(c[1]==='word3');
       if(c[1]==='doc'){
-        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype=""><option value="" selected>—</option>'+DOC_OPTIONS+'</select></td>';
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype=""><option value="" selected>-</option>'+DOC_OPTIONS+'</select></td>';
       }else if(c[1]==='cdoc'){
-        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="" data-cdoc="'+i+'"><option value="" selected>—</option>'+CHILD_DOC_OPTIONS+'</select>'+
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="" data-cdoc="'+i+'"><option value="" selected>-</option>'+CHILD_DOC_OPTIONS+'</select>'+
           '<input name="child'+i+'_passport_type_other" data-cdocother="'+i+'" placeholder="حدد النوع" style="display:none;margin-top:4px"></td>';
       }else if(c[1]==='gsel'){
-        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="req"><option value="" selected>—</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></td>';
+        html+='<td><select name="child'+i+'_'+c[0]+'" data-cvtype="req"><option value="" selected>-</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select></td>';
       }else if(isWord3){
         html+='<td><input type="text" name="child'+i+'_'+c[0]+'" data-word3 data-cvtype="word3"></td>';
       }else if(isWord){
@@ -1004,7 +1014,7 @@
 
   // ===== live validation (applicant) =====
   var fullName=document.getElementById('full_name'),mobile=document.getElementById('mobile'),email=document.getElementById('email'),
-      sres=document.getElementById('saudi_residency'),bp=document.getElementById('birth_place'),
+      sres=document.getElementById('saudi_residency'),bp=document.getElementById('birth_place'),bcity=document.getElementById('birth_city'),
       bd=document.getElementById('birth_date'),emp=document.getElementById('employer'),dist=document.getElementById('district'),
       rexp=document.getElementById('residency_expiry'),
       occ=document.getElementById('occupation');
@@ -1046,7 +1056,7 @@
     // combine into hidden full_name
     document.getElementById('full_name').value=nameParts.map(function(e){return e.value.trim();}).join(' ');
     [[mn,oneNameOK(mn.value)],
-     [sres,(sres.dataset.optional==='1'?(sres.value===''||digitsN(sres.value,10)):digitsN(sres.value,10))],[rexp,(sres.dataset.optional==='1'?true:!!rexp.value)],[bp,!!bp.value],[bd,!!bd.value],
+     [sres,(sres.dataset.optional==='1'?(sres.value===''||digitsN(sres.value,10)):digitsN(sres.value,10))],[rexp,(sres.dataset.optional==='1'?true:!!rexp.value)],[bp,!!bp.value],[bcity,!!bcity.value],[bd,!!bd.value],
      [occ,!!occ.value],[emp,!!emp.value],[dist,!!dist.value],
      [mobile,phoneOK(mobile.value)],[email,emailOK(email.value)]
     ].forEach(function(x){setInvalid(x[0],!x[1]);if(!x[1])bad(x[0]);});
