@@ -40,6 +40,9 @@
   /* iOS Safari: date/text inputs otherwise overflow their container */
   .field input[type=date],.field input:not([type=radio]):not([type=checkbox]){-webkit-appearance:none;appearance:none}
   .field input[type=date]{min-height:42px;display:block}
+  .phonerow{display:flex;gap:8px;direction:ltr}
+  .phonecode{flex:0 0 110px;text-align:center;font-weight:700}
+  .phonenum{flex:1;text-align:left;direction:ltr}
   .field select{border-radius:22px;appearance:none;padding-inline-start:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A1F2B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--wine);box-shadow:0 0 0 3px rgba(122,31,43,.13)}
   .field textarea{resize:vertical;min-height:54px;border-radius:var(--radius-sm)}
@@ -326,9 +329,16 @@
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
         <div class="field">
-          <label>رقم الجوال (+966 أو +970) <span class="req">*</span> <span class="info" data-tip="رقم الجوال مع رمز الدولة، يبدأ بـ +966 أو +970.">i</span></label>
-          <input name="mobile" id="mobile" inputmode="tel" required placeholder="+9665XXXXXXXX أو +970XXXXXXXXX">
-          <div class="err-msg">يجب أن يبدأ بـ +966 (السعودية) أو +970 (فلسطين)</div>
+          <label>رقم الجوال <span class="req">*</span> <span class="info" data-tip="اختر رمز الدولة ثم اكتب رقم الجوال بالأرقام فقط.">i</span></label>
+          <div class="phonerow">
+            <select id="mobileCode" class="phonecode">
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+970">🇵🇸 +970</option>
+            </select>
+            <input id="mobileNum" class="phonenum" inputmode="numeric" required placeholder="5XXXXXXXX" oninput="capDigits(this,9)">
+          </div>
+          <input type="hidden" name="mobile" id="mobile">
+          <div class="err-msg" id="mobileErr">أدخل رقم جوال صحيح</div>
         </div>
         <div class="field">
           <label>البريد الإلكتروني <span class="info" data-tip="بريد إلكتروني صحيح للتواصل (اختياري).">i</span></label>
@@ -704,6 +714,17 @@
       });
       // split stored full_name into the 4 applicant name fields
       if(seed.full_name)splitName(seed.full_name,['name1','name2','name3','name4']);
+      // split stored mobile (+9665xxxx / +970xxxx) into code + number
+      if(seed.mobile){
+        var mv=String(seed.mobile).replace(/[\s-]/g,'');
+        var cEl=document.getElementById('mobileCode'), nEl=document.getElementById('mobileNum');
+        if(cEl&&nEl){
+          if(mv.indexOf('+970')===0||mv.indexOf('970')===0){cEl.value='+970';nEl.value=mv.replace(/^\+?970/,'');}
+          else if(mv.indexOf('+966')===0||mv.indexOf('966')===0){cEl.value='+966';nEl.value=mv.replace(/^\+?966/,'');}
+          else{nEl.value=mv.replace(/[^0-9]/g,'');}
+          combineMobile();
+        }
+      }
       // restore passport/wathiqa answers ONLY when updating an existing record
       if(isUpdate)(function(){
         var hasP=(seed.passport_no&&String(seed.passport_no).trim()!=='');
@@ -770,6 +791,23 @@
   function digitsN(v,n){return new RegExp('^[0-9]{'+n+'}$').test((v||'').trim());}
   function digitsOnly(v){return /^[0-9]+$/.test((v||'').trim());}
   function phoneOK(v){v=(v||'').replace(/[\s-]/g,'');return /^\+?966[0-9]{9}$/.test(v)||/^\+?970[0-9]{8,9}$/.test(v);}
+  // يجمع رمز الدولة + الرقم في الحقل المخفي
+  function combineMobile(){
+    var code=document.getElementById('mobileCode'), num=document.getElementById('mobileNum'), hid=document.getElementById('mobile');
+    if(!code||!num||!hid)return '';
+    var digits=(num.value||'').replace(/[^0-9]/g,'');
+    hid.value = digits? (code.value+digits) : '';
+    return hid.value;
+  }
+  // يتحقق من صحة رقم الجوال حسب رمز الدولة المختار
+  function mobilePartsOK(){
+    var code=document.getElementById('mobileCode'), num=document.getElementById('mobileNum');
+    if(!code||!num)return false;
+    var d=(num.value||'').replace(/[^0-9]/g,'');
+    if(code.value==='+966') return /^5[0-9]{8}$/.test(d); // السعودية: 9 أرقام تبدأ بـ 5
+    if(code.value==='+970') return /^5[0-9]{8}$/.test(d)||/^[0-9]{8}$/.test(d); // فلسطين: 8-9 أرقام
+    return false;
+  }
   function emailOK(v){return v===''||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
   function setInvalid(el,bad){var f=el.closest('.field');if(f)f.classList.toggle('invalid',bad);}
   // vtype rules used across sections:
@@ -1026,7 +1064,10 @@
   var motherEl=document.getElementById('mother_name');
   if(motherEl)motherEl.addEventListener('blur',()=>setInvalid(motherEl,!oneNameOK(motherEl.value)));
   wireArabic(document); // applicant text fields
-  mobile.addEventListener('blur',()=>setInvalid(mobile,!phoneOK(mobile.value)));
+  var mobileNumEl=document.getElementById('mobileNum'),mobileCodeEl=document.getElementById('mobileCode');
+  if(mobileNumEl){mobileNumEl.addEventListener('blur',function(){combineMobile();setInvalid(mobileNumEl,!mobilePartsOK());});
+    mobileNumEl.addEventListener('input',combineMobile);}
+  if(mobileCodeEl){mobileCodeEl.addEventListener('change',function(){combineMobile();setInvalid(mobileNumEl,!mobilePartsOK());});}
   email.addEventListener('blur',()=>setInvalid(email,!emailOK(email.value)));
   pid.addEventListener('blur',()=>setInvalid(pid,pid.value!==''&&!digitsN(pid.value,9)));
   sres.addEventListener('blur',()=>setInvalid(sres,!digitsN(sres.value,10)));
@@ -1058,7 +1099,7 @@
     [[mn,oneNameOK(mn.value)],
      [sres,(sres.dataset.optional==='1'?(sres.value===''||digitsN(sres.value,10)):digitsN(sres.value,10))],[rexp,(sres.dataset.optional==='1'?true:!!rexp.value)],[bp,!!bp.value],[bcity,!!bcity.value],[bd,!!bd.value],
      [occ,!!occ.value],[emp,!!emp.value],[dist,!!dist.value],
-     [mobile,phoneOK(mobile.value)],[email,emailOK(email.value)]
+     [mobileNumEl,mobilePartsOK()],[email,emailOK(email.value)]
     ].forEach(function(x){setInvalid(x[0],!x[1]);if(!x[1])bad(x[0]);});
     // palestinian id optional but if filled must be 9
     var pidOK=pid.value===''||digitsN(pid.value,9);setInvalid(pid,!pidOK);if(!pidOK)bad(pid);
@@ -1102,6 +1143,7 @@
     if(firstBad){firstBad.focus();firstBad.scrollIntoView({behavior:'smooth',block:'center'});
       statusEl.textContent='يرجى تصحيح الحقول المميزة بالأحمر';statusEl.classList.add('err');return;}
 
+    combineMobile();
     var data={};new FormData(form).forEach((v,k)=>data[k]=v);
     data.submitted_at=new Date().toISOString();
 
