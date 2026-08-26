@@ -206,10 +206,16 @@
           <label style="font-weight:700;font-size:13.5px;display:block;margin-bottom:5px">سبب الحضور <span class="req">*</span></label>
           <select id="gatePurpose">
             <option value="" disabled selected>- اختر -</option>
-            <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
-            <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
-            <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
-            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option>لا يوجد</option><option value="أخرى">أخرى</option>
+            <option>تسجيل مواطن / تحديث البيانات</option>
+            <option>إصدار جواز سفر جديد</option>
+            <option>تجديد جواز السفر</option>
+            <option>إصدار توكيل</option>
+            <option>خطابات</option>
+            <option>تسجيل مولود جديد</option>
+            <option>تصديق وثائق ومعاملات</option>
+            <option>شهادة حياة / إثبات حياة</option>
+            <option>بدون سبب محدد</option>
+            <option value="أخرى">أخرى</option>
           </select>
         </div>
         <div class="choice">
@@ -233,10 +239,16 @@
           <label>سبب الزيارة <span class="req">*</span> <span class="info" data-tip="اختر سبب مراجعتك للسفارة من القائمة.">i</span></label>
           <select name="reason" id="reason" required>
             <option value="" disabled selected>- اختر -</option>
-            <option>إصدار جواز سفر جديد</option><option>تجديد جواز السفر</option>
-            <option>تسجيل مواطن / تحديث البيانات</option><option>تسجيل مولود جديد</option>
-            <option>تصديق وثائق ومعاملات</option><option>إصدار توكيل</option>
-            <option>شهادة حياة / إثبات حياة</option><option>بدون سبب محدد</option><option>لا يوجد</option><option value="أخرى">أخرى</option>
+            <option>تسجيل مواطن / تحديث البيانات</option>
+            <option>إصدار جواز سفر جديد</option>
+            <option>تجديد جواز السفر</option>
+            <option>إصدار توكيل</option>
+            <option>خطابات</option>
+            <option>تسجيل مولود جديد</option>
+            <option>تصديق وثائق ومعاملات</option>
+            <option>شهادة حياة / إثبات حياة</option>
+            <option>بدون سبب محدد</option>
+            <option value="أخرى">أخرى</option>
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
@@ -838,6 +850,16 @@
 
   // ===== وثائق السفر: جواز -> وإلا وثيقة (واحدة على الأقل) =====
   var pid=document.getElementById('palestinian_id');
+  // تُعرض وثيقة السفر فقط إذا كانت الهوية الفلسطينية تبدأ بـ 0
+  // تُخفى إذا بدأت بـ 9 أو 8 أو 4 (عندها الجواز إلزامي)
+  function wathiqaAllowed(){
+    var v=(pid && pid.value ? pid.value : '').replace(/[^0-9]/g,'');
+    if(v==='') return true;            // لا توجد هوية: أبقِ السؤال ظاهراً (السلوك الافتراضي)
+    var f=v.charAt(0);
+    if(f==='9'||f==='8'||f==='4') return false; // إخفاء
+    if(f==='0') return true;            // إظهار
+    return true;                        // أي حالة أخرى: إظهار افتراضياً
+  }
   function toggleTravelDocs(){
     var hasPass=document.querySelector('input[name="hasPassport"]:checked');
     var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
@@ -847,9 +869,16 @@
       el.classList.toggle('hidden',!passYes);
       if(!passYes){var inp=el.querySelector('input'); if(inp)inp.value='';}
     });
-    // wathiqa question ALWAYS visible now
-    document.getElementById('wathiqaQwrap').classList.remove('hidden');
-    var wathYes = hasWath && hasWath.value==='yes';
+    // وثيقة السفر: تظهر فقط إذا كانت الهوية تبدأ بـ 0 (أو لا توجد هوية)
+    var allowW = wathiqaAllowed();
+    var wq=document.getElementById('wathiqaQwrap');
+    wq.classList.toggle('hidden',!allowW);
+    if(!allowW){
+      // امسح إجابة الوثيقة وأخفِ حقولها؛ الجواز يصبح إلزامياً
+      document.querySelectorAll('input[name="hasWathiqa"]').forEach(function(r){r.checked=false;});
+      hasWath=null;
+    }
+    var wathYes = allowW && hasWath && hasWath.value==='yes';
     document.querySelectorAll('[data-docgrp]').forEach(function(el){
       el.classList.toggle('hidden',!wathYes);
       if(!wathYes){var inp=el.querySelector('input,select'); if(inp)inp.value='';}
@@ -860,6 +889,8 @@
     if(!showOther){var o=docOtherWrap.querySelector('input'); if(o&&!wathYes)o.value='';}
   }
   window.toggleTravelDocs=toggleTravelDocs;
+  // إعادة تقييم ظهور الوثيقة عند تغيير رقم الهوية الفلسطينية
+  if(pid) pid.addEventListener('input',function(){toggleTravelDocs();});
 
   // ===== marital status (wife/children sections removed from form) =====
   var marital=document.getElementById('marital'),
@@ -1104,7 +1135,7 @@
     // palestinian id optional but if filled must be 9
     var pidOK=pid.value===''||digitsN(pid.value,9);setInvalid(pid,!pidOK);if(!pidOK)bad(pid);
 
-    // travel documents: both questions answered, at least one = yes
+    // travel documents validation
     (function(){
       var hasPass=document.querySelector('input[name="hasPassport"]:checked');
       var hasWath=document.querySelector('input[name="hasWathiqa"]:checked');
@@ -1112,24 +1143,38 @@
       var wathField=document.getElementById('hasWathiqaErr').closest('.field');
       document.getElementById('hasPassportErr').textContent='هذا الحقل مطلوب';
       document.getElementById('hasWathiqaErr').textContent='هذا الحقل مطلوب';
-      // both must be answered
-      if(!hasPass){ passField.classList.add('invalid'); bad(passField.querySelector('input')); } else passField.classList.remove('invalid');
-      if(!hasWath){ wathField.classList.add('invalid'); bad(wathField.querySelector('input')); } else wathField.classList.remove('invalid');
-      if(!hasPass || !hasWath) return;
-      // at least one yes
-      if(hasPass.value==='no' && hasWath.value==='no'){
-        passField.classList.add('invalid'); wathField.classList.add('invalid');
-        document.getElementById('hasWathiqaErr').textContent='يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل';
-        bad(passField.querySelector('input')); return;
+      var allowW = wathiqaAllowed();
+
+      // passport question always required
+      if(!hasPass){ passField.classList.add('invalid'); bad(passField.querySelector('input')); return; }
+      passField.classList.remove('invalid');
+
+      if(!allowW){
+        // وثيقة غير متاحة (الهوية تبدأ بـ 9/8/4): الجواز إلزامي
+        if(hasPass.value==='no'){
+          passField.classList.add('invalid');
+          document.getElementById('hasPassportErr').textContent='يجب أن تملك جواز سفر فلسطيني';
+          bad(passField.querySelector('input')); return;
+        }
+      }else{
+        // وثيقة متاحة: يجب الإجابة على السؤالين وواحد منهما نعم على الأقل
+        if(!hasWath){ wathField.classList.add('invalid'); bad(wathField.querySelector('input')); return; }
+        wathField.classList.remove('invalid');
+        if(hasPass.value==='no' && hasWath.value==='no'){
+          passField.classList.add('invalid'); wathField.classList.add('invalid');
+          document.getElementById('hasWathiqaErr').textContent='يجب أن تملك جواز سفر فلسطيني أو وثيقة سفر على الأقل';
+          bad(passField.querySelector('input')); return;
+        }
       }
+
       // passport = yes -> passport fields required
       if(hasPass.value==='yes'){
         var pno=document.getElementById('passport_no'), pex=document.getElementById('passport_expiry');
         var pnoOK=pno.value.trim()!==''&&digitsOnly(pno.value); setInvalid(pno,!pnoOK); if(!pnoOK)bad(pno);
         var pexOK=!!pex.value; setInvalid(pex,!pexOK); if(!pexOK)bad(pex);
       }
-      // wathiqa = yes -> wathiqa fields required
-      if(hasWath.value==='yes'){
+      // wathiqa = yes -> wathiqa fields required (only when allowed)
+      if(allowW && hasWath && hasWath.value==='yes'){
         var dt=document.getElementById('travel_doc_type'), dn=document.getElementById('travel_doc_no'), de=document.getElementById('travel_doc_expiry');
         var dtOK=!!dt.value; setInvalid(dt,!dtOK); if(!dtOK)bad(dt);
         if(dt.value==='أخرى'){var oth=document.querySelector('[name="travel_doc_type_other"]');var oOK=oth.value.trim()!=='';setInvalid(oth,!oOK);if(!oOK)bad(oth);}
