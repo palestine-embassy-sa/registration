@@ -4,14 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>استمارة تسجيل مواطن - سفارة دولة فلسطين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{--wine:#7A1F2B;--wine-soft:#8f3742;--wine-line:#e3cfd2;--gold:#B8860B;--gold-soft:#d9b24a;
     --ink:#2a2226;--muted:#6b6169;--line:#e7e2e4;--line-strong:#c9bfc3;--page:#f7f4f2;--card:#fff;
     --label-bg:#faf6f3;--notice-bg:#fbeef0;--field-bg:#fffdfc;--radius:12px;--radius-sm:9px;}
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  body{font-family:"Segoe UI","Tahoma",Arial,sans-serif;background:var(--page);color:var(--ink);line-height:1.6;font-size:15px;padding:26px 12px}
-  .sheet{max-width:940px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 40px rgba(122,31,43,.10)}
+  body{font-family:"Cairo","Segoe UI","Tahoma",Arial,sans-serif;background:var(--page);color:var(--ink);line-height:1.7;font-size:15px;padding:26px 12px;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:940px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(122,31,43,.06),0 18px 50px rgba(122,31,43,.10)}
   .head{position:relative;padding:34px 30px 28px;background:radial-gradient(120% 140% at 100% 0%,rgba(184,134,11,.10),transparent 55%),radial-gradient(120% 140% at 0% 0%,rgba(122,31,43,.08),transparent 55%),linear-gradient(180deg,#fffdfb,#fbf7f4);border-bottom:1px solid var(--wine-line)}
   .head-inner{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
   .head .side{text-align:center}
@@ -24,9 +27,9 @@
   .title-wrap::after{content:"";display:block;width:80px;height:3px;margin:12px auto 0;background:linear-gradient(90deg,var(--gold-soft),var(--wine),var(--gold-soft));border-radius:3px}
   .notice{margin:18px 30px 0;background:var(--notice-bg);border:1px solid #e8b9c1;color:#8a2233;font-weight:700;font-size:13.5px;padding:12px 16px;border-radius:var(--radius-sm);text-align:center}
   form{padding:10px 30px 30px}
-  .section{margin-top:24px}
+  .section{margin-top:30px}
   .section>.bar{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;font-weight:700;font-size:16px;padding:11px 18px;border-radius:var(--radius) var(--radius) 0 0;display:flex;align-items:center;gap:11px}
-  .section>.bar .num{background:rgba(255,255,255,.9);color:var(--wine);width:25px;height:25px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+  .section>.bar .num{background:#fff;color:var(--wine);width:27px;height:27px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:800;box-shadow:0 2px 6px rgba(0,0,0,.15)}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px;border:1px solid var(--line-strong);border-top:none;border-radius:0 0 var(--radius) var(--radius);background:#fff}
   .field{display:flex;flex-direction:column}
   .field.full{grid-column:1 / -1}
@@ -36,7 +39,8 @@
   .info:hover::after,.info.show::after{content:attr(data-tip);position:absolute;bottom:135%;right:50%;transform:translateX(50%);background:var(--ink);color:#fff;font-weight:500;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:normal;width:190px;text-align:right;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
   .info:hover::before,.info.show::before{content:"";position:absolute;bottom:135%;right:50%;transform:translateX(50%) translateY(100%);border:6px solid transparent;border-top-color:var(--ink);z-index:40}
   .field label .req{color:var(--wine);margin-inline-start:4px}
-  .field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);padding:10px 13px;font-family:inherit;font-size:14.5px;color:var(--ink);background:var(--field-bg);transition:border-color .15s,box-shadow .15s}
+  .field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);padding:11px 14px;font-family:inherit;font-size:14.5px;color:var(--ink);background:var(--field-bg);transition:border-color .15s,box-shadow .15s,background .15s}
+  .field input:hover:not(:focus),.field select:hover:not(:focus),.field textarea:hover:not(:focus){border-color:var(--wine-line,#d9b9c0)}
   /* iOS Safari: date/text inputs otherwise overflow their container */
   .field input[type=date],.field input:not([type=radio]):not([type=checkbox]){-webkit-appearance:none;appearance:none}
   .field input[type=date]{min-height:42px;display:block}
@@ -213,7 +217,7 @@
             <option value="خطابات">خطابات</option>
             <option value="تصديق وثائق ومعاملات">تصديق وثائق ومعاملات</option>
             <option value="شهادة حياة / إثبات حياة">شهادة حياة / إثبات حياة</option>
-            <option value="أخرى">أخرى</option>
+            
           </select>
         </div>
         <div class="choice">
@@ -244,7 +248,7 @@
             <option value="خطابات">خطابات</option>
             <option value="تصديق وثائق ومعاملات">تصديق وثائق ومعاملات</option>
             <option value="شهادة حياة / إثبات حياة">شهادة حياة / إثبات حياة</option>
-            <option value="أخرى">أخرى</option>
+            
           </select>
           <div class="err-msg">هذا الحقل مطلوب</div>
         </div>
