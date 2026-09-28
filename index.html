@@ -13,7 +13,7 @@
     --label-bg:#faf6f3;--notice-bg:#fbeef0;--field-bg:#fffdfc;--radius:12px;--radius-sm:9px;}
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  body{font-family:"Cairo","Segoe UI","Tahoma",Arial,sans-serif;background:var(--page);color:var(--ink);line-height:1.7;font-size:15px;padding:26px 12px;-webkit-font-smoothing:antialiased}
+  body{font-family:"Cairo",sans-serif;background:var(--page);color:var(--ink);line-height:1.7;font-size:15px;padding:26px 12px;-webkit-font-smoothing:antialiased}
   .sheet{max-width:940px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 4px 12px rgba(122,31,43,.06),0 18px 50px rgba(122,31,43,.10)}
   .head{position:relative;padding:34px 30px 28px;background:radial-gradient(120% 140% at 100% 0%,rgba(184,134,11,.10),transparent 55%),radial-gradient(120% 140% at 0% 0%,rgba(122,31,43,.08),transparent 55%),linear-gradient(180deg,#fffdfb,#fbf7f4);border-bottom:1px solid var(--wine-line)}
   .head-inner{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
@@ -34,7 +34,7 @@
   .field{display:flex;flex-direction:column}
   .field.full{grid-column:1 / -1}
   .field label{font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:8px}
-  .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gold);color:var(--gold);font-size:11px;font-weight:700;font-style:italic;line-height:1;margin-inline-start:6px;cursor:help;position:relative;vertical-align:middle;font-family:Georgia,'Times New Roman',serif;flex:0 0 auto}
+  .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gold);color:var(--gold);font-size:11px;font-weight:700;font-style:italic;line-height:1;margin-inline-start:6px;cursor:help;position:relative;vertical-align:middle;font-family:"Cairo",sans-serif;flex:0 0 auto}
   table.children th .info{border-color:rgba(255,255,255,.75);color:#fff}
   .info:hover::after,.info.show::after{content:attr(data-tip);position:absolute;bottom:135%;right:50%;transform:translateX(50%);background:var(--ink);color:#fff;font-weight:500;font-size:11.5px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:normal;width:190px;text-align:right;z-index:40;box-shadow:0 4px 14px rgba(0,0,0,.25)}
   .info:hover::before,.info.show::before{content:"";position:absolute;bottom:135%;right:50%;transform:translateX(50%) translateY(100%);border:6px solid transparent;border-top-color:var(--ink);z-index:40}
@@ -227,7 +227,7 @@
         <div class="gerr" id="gateFoundErr" style="margin-top:10px"></div>
       </div>
     </div>
-    <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
+    <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين - القسم القنصلي - الرياض، المملكة العربية السعودية</div>
   </div>
 
 
@@ -457,7 +457,7 @@
 
     <div class="actions"><button type="submit" class="submit" id="submitBtn">إرسال الاستمارة</button><button type="button" class="backbtn" onclick="goBackToGate()">→ الرجوع إلى البداية</button></div>
     <div class="status" id="status"></div>
-    <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين لدى المملكة العربية السعودية</div>
+    <div class="rights">© جميع الحقوق محفوظة لسفارة دولة فلسطين - القسم القنصلي - الرياض، المملكة العربية السعودية</div>
   </form>
 </div>
 
@@ -850,15 +850,9 @@
 
   // ===== وثائق السفر: جواز -> وإلا وثيقة (واحدة على الأقل) =====
   var pid=document.getElementById('palestinian_id');
-  // تُعرض وثيقة السفر فقط إذا كانت الهوية الفلسطينية تبدأ بـ 0
-  // تُخفى إذا بدأت بـ 9 أو 8 أو 4 (عندها الجواز إلزامي)
+  // سؤال وثيقة السفر يظهر دائماً للجميع (جواز أو وثيقة، واحد على الأقل)
   function wathiqaAllowed(){
-    var v=(pid && pid.value ? pid.value : '').replace(/[^0-9]/g,'');
-    if(v==='') return true;            // لا توجد هوية: أبقِ السؤال ظاهراً (السلوك الافتراضي)
-    var f=v.charAt(0);
-    if(f==='9'||f==='8'||f==='4') return false; // إخفاء
-    if(f==='0') return true;            // إظهار
-    return true;                        // أي حالة أخرى: إظهار افتراضياً
+    return true;
   }
   function toggleTravelDocs(){
     var hasPass=document.querySelector('input[name="hasPassport"]:checked');
