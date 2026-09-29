@@ -76,6 +76,12 @@
   .backbtn{background:#fff;border:1.5px solid var(--wine-line);color:var(--wine);font-family:inherit;font-weight:700;font-size:13.5px;padding:11px 18px;border-radius:24px;cursor:pointer;transition:all .15s}
   .backbtn:hover{background:var(--wine);color:#fff;border-color:var(--wine)}
   @media(max-width:660px){.actions{padding:0 14px;gap:10px}.backbtn{font-size:12.5px;padding:10px 14px}}
+  #wivesCountField{grid-column:1 / -1}
+  #wivesContainer{grid-column:1 / -1;padding:0 30px}
+  .wife-row{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;padding:14px 0;border-bottom:1px dashed var(--wine-line,#e6d3d6)}
+  .wife-row:last-child{border-bottom:none}
+  .wife-row .wife-other{grid-column:1 / -1}
+  @media(max-width:660px){#wivesContainer{padding:0 14px}.wife-row{grid-template-columns:1fr;gap:10px}}
   button.submit{background:linear-gradient(180deg,var(--wine),var(--wine-soft));color:#fff;border:none;font-family:inherit;font-weight:800;font-size:16px;padding:14px 44px;border-radius:26px;cursor:pointer;box-shadow:0 6px 18px rgba(122,31,43,.25)}
   button.submit:hover{transform:translateY(-1px)}
   button.submit:disabled{opacity:.6;cursor:not-allowed}
@@ -896,20 +902,22 @@
   lockOptionValues(document);
 
   function wifeBlockHTML(i){
-    return '<div class="field wifeblk">'+
-        '<label>اسم الزوج/الزوجة '+i+' الرباعي <span class="req">*</span> <span class="info" data-tip="الاسم الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>'+
-        '<input name="wife'+i+'_name" data-ar placeholder="الاسم الأول الثاني الثالث الرابع">'+
-        '<div class="err-msg">مطلوب - أربعة أسماء بالحروف العربية</div>'+
-      '</div>'+
-      '<div class="field wifeblk">'+
-        '<label>جنسية الزوج/الزوجة '+i+' <span class="req">*</span> <span class="info" data-tip="اختر الجنسية.">i</span></label>'+
-        '<select name="wife'+i+'_nationality" data-wnat="'+i+'"><option value="" disabled selected>- اختر -</option>'+COUNTRY_OPTIONS+'</select>'+
-        '<div class="err-msg">هذا الحقل مطلوب</div>'+
-      '</div>'+
-      '<div class="field wifeblk hidden" data-wnatother="'+i+'">'+
-        '<label>حدد جنسية الزوج/الزوجة '+i+' <span class="req">*</span> <span class="info" data-tip="اكتب الجنسية إذا اخترت «أخرى».">i</span></label>'+
-        '<input name="wife'+i+'_nationality_other" data-ar placeholder="اكتب الجنسية">'+
-        '<div class="err-msg">هذا الحقل مطلوب</div>'+
+    return '<div class="wife-row">'+
+        '<div class="field wifeblk">'+
+          '<label>اسم الزوج/الزوجة '+i+' الرباعي <span class="req">*</span> <span class="info" data-tip="الاسم الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>'+
+          '<input name="wife'+i+'_name" data-ar placeholder="الاسم الأول الثاني الثالث الرابع">'+
+          '<div class="err-msg">مطلوب - أربعة أسماء بالحروف العربية</div>'+
+        '</div>'+
+        '<div class="field wifeblk">'+
+          '<label>جنسية الزوج/الزوجة '+i+' <span class="req">*</span> <span class="info" data-tip="اختر الجنسية.">i</span></label>'+
+          '<select name="wife'+i+'_nationality" data-wnat="'+i+'"><option value="" disabled selected>- اختر -</option>'+COUNTRY_OPTIONS+'</select>'+
+          '<div class="err-msg">هذا الحقل مطلوب</div>'+
+        '</div>'+
+        '<div class="field wifeblk wife-other hidden" data-wnatother="'+i+'">'+
+          '<label>حدد جنسية الزوج/الزوجة '+i+' <span class="req">*</span> <span class="info" data-tip="اكتب الجنسية إذا اخترت «أخرى».">i</span></label>'+
+          '<input name="wife'+i+'_nationality_other" data-ar placeholder="اكتب الجنسية">'+
+          '<div class="err-msg">هذا الحقل مطلوب</div>'+
+        '</div>'+
       '</div>';
   }
   function renderWives(n){
