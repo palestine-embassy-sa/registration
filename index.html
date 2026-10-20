@@ -902,6 +902,12 @@
   lockOptionValues(document);
 
   function wifeBlockHTML(i){
+    var relBlock = (i>=2) ?
+        '<div class="field wifeblk">'+
+          '<label>العلاقة بالزوج/الزوجة '+i+' <span class="req">*</span> <span class="info" data-tip="هل الزواج قائم حالياً أم منتهٍ بطلاق أو وفاة؟">i</span></label>'+
+          '<select name="wife'+i+'_relationship"><option value="" disabled selected>- اختر -</option><option value="متزوج / متزوجة">متزوج / متزوجة</option><option value="مطلق / مطلقة">مطلق / مطلقة</option><option value="أرمل / أرملة">أرمل / أرملة</option></select>'+
+          '<div class="err-msg">هذا الحقل مطلوب</div>'+
+        '</div>' : '';
     return '<div class="wife-row">'+
         '<div class="field wifeblk">'+
           '<label>اسم الزوج/الزوجة '+i+' الرباعي <span class="req">*</span> <span class="info" data-tip="الاسم الرباعي كاملاً بالحروف العربية (أربعة أسماء).">i</span></label>'+
@@ -913,6 +919,7 @@
           '<select name="wife'+i+'_nationality" data-wnat="'+i+'"><option value="" disabled selected>- اختر -</option>'+COUNTRY_OPTIONS+'</select>'+
           '<div class="err-msg">هذا الحقل مطلوب</div>'+
         '</div>'+
+        relBlock+
         '<div class="field wifeblk wife-other hidden" data-wnatother="'+i+'">'+
           '<label>حدد جنسية الزوج/الزوجة '+i+' <span class="req">*</span> <span class="info" data-tip="اكتب الجنسية إذا اخترت «أخرى».">i</span></label>'+
           '<input name="wife'+i+'_nationality_other" data-ar placeholder="اكتب الجنسية">'+
@@ -1053,6 +1060,7 @@
         if(nameEl){var nok=fourArabicOK(nameEl.value);setInvalid(nameEl,!nok);if(!nok)bad(nameEl);}
         if(natEl){var b=!natEl.value;setInvalid(natEl,b);if(b)bad(natEl);}
         if(natEl && natEl.value==='أخرى' && othWrap){var oth=othWrap.querySelector('input');var ook=oth.value.trim()!=='';setInvalid(oth,!ook);if(!ook)bad(oth);}
+        if(i>=2){var relEl=wivesContainer.querySelector('[name="wife'+i+'_relationship"]');if(relEl){var rb=!relEl.value;setInvalid(relEl,rb);if(rb)bad(relEl);}}
       }
     })();
     // applicant required + rules
