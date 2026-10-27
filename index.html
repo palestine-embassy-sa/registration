@@ -226,6 +226,10 @@
             
           </select>
         </div>
+        <div class="purpose" id="gateDobWrap" style="margin-top:12px">
+          <label style="font-weight:700;font-size:13.5px;display:block;margin-bottom:5px">تاريخ الميلاد (للتحقق عند تحديث البيانات)</label>
+          <input type="date" id="gateDob" style="width:100%">
+        </div>
         <div class="choice">
           <button type="button" class="update" onclick="gateProceed('update')">تحديث البيانات</button>
           <button type="button" class="newreq" onclick="gateProceed('new')">طلب جديد</button>
@@ -628,7 +632,7 @@
     if(!hasPalSel){err.textContent='يرجى تحديد: هل تحمل هوية فلسطينية؟';return;}
     if(hasPalSel.value==='yes' && !gDigits(pal,9)){err.textContent='رقم الهوية الفلسطينية مطلوب ويجب أن يكون 9 أرقام';return;}
 
-    var seed={__type:__gateType};
+    var seed={__type:__gateType};window.__gateSeed=seed;
     if(__gateType==='resident' && sid)seed.saudi_residency=sid;
     if(__gateType==='visitor'  && bnum)seed.border_no=bnum;
     if(hasPalSel.value==='yes' && pal)seed.palestinian_id=pal;
@@ -637,8 +641,8 @@
     try{
       var d=await _jsonp({action:'lookup',saudi_residency:sid,palestinian_id:pal,border_no:bnum});
       if(d && d.found){
-        __prefill=d.record||{};
-        document.getElementById('foundName').textContent=__prefill.full_name||'-';
+        __prefill={}; // لا يعيد الخادم أي بيانات شخصية قبل التحقق
+        document.getElementById('foundName').textContent=d.name||'-';
         document.getElementById('gateFound').style.display='block';
         document.getElementById('gateFound').scrollIntoView({behavior:'smooth',block:'center'});
       }else{
@@ -665,15 +669,29 @@
       purposeEl.focus();
       return;
     }
+    var gs=window.__gateSeed||{};
     if(mode==='update'){
-      openForm(true,__prefill||{});
+      var dobEl=document.getElementById('gateDob');
+      if(!dobEl.value){err.textContent='أدخل تاريخ الميلاد للتحقق من هويتك قبل تحديث البيانات';dobEl.focus();return;}
+      var ubtn2=document.querySelector('#gateFound .update');
+      if(ubtn2){ubtn2.disabled=true;ubtn2.textContent='جارٍ التحقق…';}
+      var v=null;
+      try{v=await _jsonp({action:'verify',saudi_residency:gs.saudi_residency||'',border_no:gs.border_no||'',birth_date:dobEl.value});}catch(e){}
+      if(ubtn2){ubtn2.disabled=false;ubtn2.textContent='تحديث البيانات';}
+      if(v&&v.ok===false&&v.error==='rate'){err.textContent='محاولات كثيرة، يرجى المحاولة لاحقاً أو مراجعة الموظف.';return;}
+      if(v&&v.reason==='mismatch'){err.textContent='تاريخ الميلاد غير مطابق للسجل.';return;}
+      var seedRec=(v&&v.verified&&v.record)?Object.assign({},v.record):{};
+      seedRec.__type=gs.__type;
+      if(gs.saudi_residency)seedRec.saudi_residency=gs.saudi_residency;
+      if(gs.border_no)seedRec.border_no=gs.border_no;
+      if(!seedRec.birth_date)seedRec.birth_date=dobEl.value;
+      openForm(true,seedRec);
       var r=document.getElementById('reason'); if(r){r.value=purpose; r.dispatchEvent(new Event('change'));}
     }else{
-      // طلب جديد: أرسل مباشرة بناءً على البيانات المحفوظة دون إعادة التعبئة
-      var rec=Object.assign({},__prefill||{});
-      // احتفظ فقط بحقول البيانات، واضبط سبب الزيارة والوقت
-      delete rec.__type; delete rec.row; delete rec.status; delete rec.tags; delete rec.admin_notes;
-      rec.reason=purpose;
+      // طلب جديد: يُرسل رقم التعريف وسبب الحضور فقط، ويضيفه الخادم إلى سجل الشخص
+      var rec={reason:purpose};
+      if(gs.saudi_residency)rec.saudi_residency=gs.saudi_residency;
+      if(gs.border_no)rec.border_no=gs.border_no;
       rec.submitted_at=new Date().toISOString();
       var ubtn=document.querySelector('#gateFound .newreq');
       if(ubtn){ubtn.disabled=true;ubtn.textContent='جارٍ الإرسال…';}
