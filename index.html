@@ -589,7 +589,7 @@
       s.onerror=function(){reject(new Error('network'));cleanup();};
       function cleanup(){delete window[cb];s.remove();}
       document.body.appendChild(s);
-      setTimeout(function(){if(window[cb]){reject(new Error('timeout'));cleanup();}},15000);
+      setTimeout(function(){if(window[cb]){reject(new Error('timeout'));cleanup();}},45000);
     });
   }
   function gDigits(v,n){return new RegExp('^[0-9]{'+n+'}$').test((v||'').trim());}
